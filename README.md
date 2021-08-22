@@ -18,7 +18,8 @@ given filter.
 ## Example
 
 To predict the properties of a 6 pole Chebyshev filter of 0.01 dB ripple centered at 2.3 GHz
-with a ripple bandwidth of 26.9 Mhz and an unloaded resonator Q of 1400, run:
+with a ripple bandwidth of 26.9 Mhz and an unloaded resonator Q of 1400, run the following.
+(This filter is an example from Ness's paper. [1])
 
 
 ```
