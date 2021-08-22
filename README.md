@@ -11,7 +11,8 @@ The script has tables for low pass prototype filters, coupled
 filters, and predistorted filters.  Use this script to predict
 the properties of a filter you are designing.  It calculates
 the insertion loss, the transmission delay, minimum
-return loss, as well as the various Ness [1][2] group delays for the
+return loss, as well as the various Ness [1][2] group delays 
+and associated return losses for the
 given filter.
 
 ## Example
@@ -112,8 +113,8 @@ Filter Termination and Line Impedance Mismatch Results (QU=1400.0)
   Termination Resistance          100.0000 ohm
   Transmission Delay               39.2184 ns
   Insertion Loss                    3.4027 dB
-  Empirical QE1                   33.4034
-  Empirical QE6                   33.4037
+  Empirical QE1                    33.4034
+  Empirical QE6                    33.4037
 ```
 
 

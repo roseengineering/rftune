@@ -206,8 +206,8 @@ def main():
                 print('  Transmission Delay       {:15.4f} ns'.format(td * 1e9))
                 il = -db(fn(fo, qu))
                 print('  Insertion Loss           {:15.4f} dB'.format(il))
-                print('  Empirical QE{}           {:15.4f}'.format(1, QE1))
-                print('  Empirical QE{}           {:15.4f}'.format(N, QE2))
+                print('  Empirical QE{}            {:15.4f}'.format(1, QE1))
+                print('  Empirical QE{}            {:15.4f}'.format(N, QE2))
 
             if args.validate: # and not np.isinf(qu):
                 from ness import qequ_groupdelay, k12_groupdelay
@@ -230,15 +230,5 @@ if __name__ == '__main__':
         main()
     except KeyboardInterrupt:
         pass
-
-
-
-
-
-
-
-
-
-
 
 

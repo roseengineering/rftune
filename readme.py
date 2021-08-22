@@ -26,7 +26,8 @@ The script has tables for low pass prototype filters, coupled
 filters, and predistorted filters.  Use this script to predict
 the properties of a filter you are designing.  It calculates
 the insertion loss, the transmission delay, minimum
-return loss, as well as the various Ness [1][2] group delays for the
+return loss, as well as the various Ness [1][2] group delays 
+and associated return losses for the
 given filter.
 
 ## Example
