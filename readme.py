@@ -46,7 +46,7 @@ will adjust its predictions for this.
 Delay Bandwidth is the bandwidth determined from the group-delay response
 of S21, that is, the width of the group delay peaks in the S21 response.
 
-[](ness.png)
+![](ness.png)
 
 # Usage
 
