@@ -62,6 +62,11 @@ Ness Group Delay and Return Loss (QU=1400.0)
 ```
 
 
+Delay Bandwidth is the bandwidth determined from the group-delay response
+of S21, that is, the width of the group delay peaks in the S21 response.
+
+![](ness.png)
+
 If your VNA is 50 ohms but your filter terminates in 100 ohms, the script
 will adjust its predictions for this.
 
@@ -118,11 +123,6 @@ Filter Termination and Line Impedance Mismatch Results (QU=1400.0)
   Empirical QE6                    33.4037
 ```
 
-
-Delay Bandwidth is the bandwidth determined from the group-delay response
-of S21, that is, the width of the group delay peaks in the S21 response.
-
-![](ness.png)
 
 # Usage
 
