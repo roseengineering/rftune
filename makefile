@@ -11,8 +11,10 @@ rftune: ${src}
 README.md: readme.py
 	python3 readme.py > README.md
 
+install:
+	sudo cp rftune /usr/local/bin
 clean:
-	rm -rf .ipynb_checkpoints *.dat *.lst rftune.* rftune README.md
+	rm -rf .ipynb_checkpoints *.dat *.lst rftune.*
 
 ############################################
 
