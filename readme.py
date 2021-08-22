@@ -34,12 +34,10 @@ given filter.
 
 To predict the properties of a 6 pole Chebyshev filter of 0.01 dB ripple centered at 2.3 GHz
 with a ripple bandwidth of 26.9 Mhz and an unloaded resonator Q of 1400, run the following.
-(This filter is an example from Ness's paper. [1])
 
 { run("rftune -g --cheb .01 -n 6 -f 2.3e9 -b 26.9e6 -u 1400") }
 
-Delay Bandwidth is the bandwidth determined from the group-delay response
-of S21, that is, the width of the group delay peaks in the S21 response.
+This filter is an example from Ness's paper.
 
 ![](ness.png)
 
@@ -47,6 +45,9 @@ If your VNA is 50 ohms but your filter terminates in 100 ohms, the script
 will adjust its predictions for this.
 
 { run("rftune -g --cheb .01 -n 6 -f 2.3e9 -b 26.9e6 -u 1400 --re 100") }
+
+Delay Bandwidth is the bandwidth determined from the group-delay response
+of S21, that is, the width of the group delay peaks in the S21 response.
 
 # Usage
 
