@@ -3,7 +3,7 @@ src = coupled.py lowpass.py __main__.py ness.py zverev.py
 all: rftune README.md
 
 rftune: ${src}
-	zip rftune.zip ${src}
+	python -m zipfile -c rftune.zip ${src}
 	echo '#!/usr/bin/python3' | cat - rftune.zip > rftune
 	rm rftune.zip
 	chmod 755 rftune
@@ -14,13 +14,17 @@ README.md: readme.py
 install:
 	sudo cp rftune /usr/local/bin
 clean:
-	rm -rf .ipynb_checkpoints *.dat *.lst rftune.*
+	rm -rf .ipynb_checkpoints/ *.dat *.lst rftune.*
+distclean:
+	rm -f rftune README.md
 
 ############################################
 
 repo = $(shell basename `pwd`)
 
 zip: clean
+	#rm -f ~/apps/${repo}.zip
+	#cd ..; python -m zipfile -c ~/apps/${repo}.zip ${repo}
 	cd ..; zip -r -FS ~/apps/${repo} ${repo}
 
 run: rftune
