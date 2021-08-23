@@ -55,15 +55,13 @@ def list_qk(qk, bw, fo):
 
 def list_groupdelays(TD1, TD2, MA1, MA2):
     N = len(TD1)
-    MA1 = db(1 / abs(MA1)) 
-    MA2 = db(1 / abs(MA2)) 
     width = len(' '.join([ str(i) for i in range(1, N+1) ]))
     for n in range(N):
         res1 = ' '.join([ str(i) for i in range(1, n+2) ])
         res2 = ' '.join([ str(i) for i in range(N, N-n-1, -1) ])
         print('  {} {:9.3f} ns {:7.3f} dB   |   {} {:9.3f} ns {:7.3f} dB'.format(
-              res1.ljust(width), TD1[n] * 1e9, MA1[n],
-              res2.ljust(width), TD2[n] * 1e9, MA2[n]))
+              res1.ljust(width), TD1[n] * 1e9, abs(db(MA1[n])),
+              res2.ljust(width), TD2[n] * 1e9, abs(db(MA2[n]))))
 
 
 def find_filter(table, name, value=None):
