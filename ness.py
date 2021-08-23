@@ -79,7 +79,8 @@ def qk_groupdelayfo(td, fo):
 ####
 
 def db(x):
-    return 20 * np.log10(abs(x))
+    with np.errstate(divide='ignore'):
+        return 20 * np.log10(abs(x))
 
 
 # calculate group delay at f using fn(f,qu)

@@ -124,6 +124,9 @@ Filter Termination and Line Impedance Mismatch Results (QU=1400.0)
 
 Delay Bandwidth is the bandwidth determined from the group-delay response
 of S21, that is, the width that separates the two group delay peaks in the S21 response.
+For some filter types, like Bessel and Gaussian,
+there are no twin group delay peaks in S21
+so the predicted delay bandwidth value will be wrong.
 
 # Usage
 
