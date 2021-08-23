@@ -23,10 +23,9 @@ distclean:
 repo = $(shell basename `pwd`)
 
 zip: clean
-	#rm -f ~/apps/${repo}.zip
-	#cd ..; python -m zipfile -c ~/apps/${repo}.zip ${repo}
 	cd ..; zip -r -FS ~/apps/${repo} ${repo}
 
 run: rftune
+	./rftune -n 2 --but -f 2.3e9 -b 26.9e6
 	./rftune -n 2 --cheb 0.01 -f 7.1e6 -b 200e3 --qu 800 --validate 
 
