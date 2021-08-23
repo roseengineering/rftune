@@ -23,6 +23,7 @@ distclean:
 repo = $(shell basename `pwd`)
 
 zip: clean
+	git gc
 	cd ..; zip -r -FS ~/apps/${repo} ${repo}
 
 run: rftune
