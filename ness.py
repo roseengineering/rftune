@@ -1,5 +1,6 @@
 
 import numpy as np
+import sympy as sy
 
 
 # cohn approximation of insertion loss
@@ -11,7 +12,6 @@ def insertion_loss(g, bw, fo, qu):
 # return function fn(f, qu) which calculates the S11 group delay at f
 # for lossy bp filters shorted at resonator n
 def fn_groupdelay_tdqu(g, bw, fo, n):
-    import sympy as sy
     f, w, wo, dw, wp, qu = sy.symbols("f w wo dw wp qu")
     xin = lowpass_xin(g, wp, n)
     WP = wo / dw * (w / wo - wo / w) - wo * sy.I / (qu * dw)
@@ -26,7 +26,6 @@ def fn_groupdelay_tdqu(g, bw, fo, n):
 # return function fn(f, qu) which calculates the Ness S11 values
 # for lossy bp filters shorted at resonator n
 def fn_groupdelay_maqu(g, bw, fo, n):
-    import sympy as sy
     f, w, wo, dw, wp, qu = sy.symbols("f w wo dw wp qu")
     xin = lowpass_xin(g, wp, n)
     WP = wo / dw * (w / wo - wo / w) - wo * sy.I / (qu * dw)
@@ -46,26 +45,6 @@ def rho_qequ(qk, bw, fo, qu):
     return (1 - qe / qu) / (1 + qe / qu)
 
 
-# return the time domain of gamma values at frequencies f
-def timedomain(f, gm):
-    gm = np.concatenate(([0], gm))
-    N = len(gm)
-    window = np.kaiser(N, 14) # kaiser gives nicer peaks and dips
-    td = np.fft.ifft(gm * window, N * 2 - 1) # ensure odd
-    td = db(td[:N])
-    df = f[1] - f[0]
-    taxis = np.linspace(0, 1 / df / 2, N)
-    return taxis, td
-
-
-# calculate the frequency span needed for a given time domain period
-def range_timedomain(fo, period, n):
-    df = 1 / (2 * period)
-    df = fo / np.ceil(fo / df)
-    span = (n - 1) * df
-    return np.linspace(fo - span / 2, fo + span / 2, n)
-
-
 # for a lossless bp filter, calculate qk from Ness group delay values at fo
 def qk_groupdelayfo(td, fo):
     wo = 2 * np.pi * fo
@@ -76,7 +55,9 @@ def qk_groupdelayfo(td, fo):
     return qk
 
 
-####
+#######################
+# miscellaneous
+#######################
 
 def db(x):
     with np.errstate(divide='ignore'):
@@ -134,6 +115,30 @@ def coupling_g(g):
 
 
 #######################
+# time domain
+#######################
+
+# return the time domain of gamma values at frequencies f
+def timedomain(f, gm):
+    gm = np.concatenate(([0], gm))
+    N = len(gm)
+    window = np.kaiser(N, 14) # kaiser gives nicer peaks and dips
+    td = np.fft.ifft(gm * window, N * 2 - 1) # ensure odd
+    td = db(td[:N])
+    df = f[1] - f[0]
+    taxis = np.linspace(0, 1 / df / 2, N)
+    return taxis, td
+
+
+# calculate the frequency span needed for a given time domain period
+def range_timedomain(fo, period, n):
+    df = 1 / (2 * period)
+    df = fo / np.ceil(fo / df)
+    span = (n - 1) * df
+    return np.linspace(fo - span / 2, fo + span / 2, n)
+
+
+#######################
 # filters
 #######################
 
@@ -185,7 +190,6 @@ def nodal_filter(qk, bw, fo):
 
 # return a function fn(f, qu) for calculating the S11 of a nodal filter
 def fn_nodal_reflection(qk, bw, fo, re=1):
-    import sympy as sy
     lp, cp, cs = nodal_filter(qk, bw, fo)
     f, w, qu = sy.symbols('f w qu')
     zin = re
@@ -203,7 +207,6 @@ def fn_nodal_reflection(qk, bw, fo, re=1):
 
 # return a function fn(f, qu) for calculating the S21 of a nodal filter
 def fn_nodal_transmission(qk, fo, bw, re=1):
-    import sympy as sy
     lp, cp, cs = nodal_filter(qk, fo, bw)
     f, w, qu = sy.symbols('f w qu')
     vin = 1
@@ -324,7 +327,6 @@ def k12_groupdelay(fo, td1, td2, ma1):
 
 # calculate the Ness S11 values at fo for a filter with a given QU
 def groupdelay_maqu(g, bw, fo, qu):
-    import sympy as sy
     w, wo, dw, wp = sy.symbols("w wo dw wp")
     ma = []
     for n in range(1, len(g)-1):
@@ -341,7 +343,6 @@ def groupdelay_maqu(g, bw, fo, qu):
 
 # calculate the Ness group delays at fo for a filter with a given QU
 def groupdelay_tdqu(g, bw, fo, qu):
-    import sympy as sy
     w, wo, dw, wp = sy.symbols("w wo dw wp")
     td = []
     for n in range(1, len(g)-1):

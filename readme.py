@@ -52,6 +52,19 @@ For some filter types, like Bessel and Gaussian,
 there are no twin group delay peaks in S21
 so the predicted delay bandwidth value will be wrong.
 
+# Calculating QE, QU and K12 from Measurements
+
+Say you measure a return loss and a Ness group delay of
+.830 dB and 18.534 ns for the first resonantor of the above
+filter.  To calculate this resonator's QE and QU use:
+
+{ run("rftune -f 2.3e9 --qequ .830 18.534") }
+
+Next, say, you measure a Ness group delay of 32.025 ns for the second resonator.
+To find k12 use:
+
+{ run("rftune -f 2.3e9 --k12 .830 18.534 32.025") }
+
 # Usage
 
 { run("rftune -h") }

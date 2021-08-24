@@ -33,24 +33,24 @@ Delay Bandwidth     =         30.5490 MHz
 Transmission Delay  =         44.6989 ns
 Minimum Return Loss =         27.5983 dB
 Insertion Loss      =          2.0144 dB
-Unloaded QU         =       1400.0000
-Filter Loaded QL    =         85.5019
+Unloaded Qu         =       1400.0000
+Loaded Ql           =         85.5019
 Normalized Qo       =         16.3739
-Normalized and Denormalized Qi and Kij
-  q1      0.781350   |   Q1     66.806877
-  k12     0.970077   |   K12     0.011346
-  k23     0.659672   |   K23     0.007715
-  k34     0.620929   |   K34     0.007262
-  k45     0.659672   |   K45     0.007715
-  k56     0.970073   |   K56     0.011346
-  q6      0.781356   |   Q6     66.807423
+Normalized and Denormalized qi and kij
+  q1      0.781350              |   Q1     66.806877
+  k12     0.970077              |   K12     0.011346
+  k23     0.659672              |   K23     0.007715
+  k34     0.620929              |   K34     0.007262
+  k45     0.659672              |   K45     0.007715
+  k56     0.970073              |   K56     0.011346
+  q6      0.781356              |   Q6     66.807423
 Lossless Ness Group Delay and Return Loss
-  1              18.492 ns  -0.000 dB   |   6              18.492 ns  -0.000 dB
-  1 2            32.186 ns  -0.000 dB   |   6 5            32.186 ns  -0.000 dB
-  1 2 3          58.480 ns  -0.000 dB   |   6 5 4          58.480 ns  -0.000 dB
-  1 2 3 4        68.514 ns  -0.000 dB   |   6 5 4 3        68.514 ns  -0.000 dB
-  1 2 3 4 5      93.909 ns  -0.000 dB   |   6 5 4 3 2      93.909 ns  -0.000 dB
-  1 2 3 4 5 6    85.313 ns  -0.000 dB   |   6 5 4 3 2 1    85.313 ns  -0.000 dB
+  1              18.492 ns   0.000 dB   |   6              18.492 ns   0.000 dB
+  1 2            32.186 ns   0.000 dB   |   6 5            32.186 ns   0.000 dB
+  1 2 3          58.480 ns   0.000 dB   |   6 5 4          58.480 ns   0.000 dB
+  1 2 3 4        68.514 ns   0.000 dB   |   6 5 4 3        68.514 ns   0.000 dB
+  1 2 3 4 5      93.909 ns   0.000 dB   |   6 5 4 3 2      93.909 ns   0.000 dB
+  1 2 3 4 5 6    85.313 ns   0.000 dB   |   6 5 4 3 2 1    85.313 ns   0.000 dB
 Ness Group Delay and Return Loss (QU=1400.0)
   1              18.534 ns   0.830 dB   |   6              18.534 ns   0.830 dB
   1 2            32.025 ns   1.440 dB   |   6 5            32.025 ns   1.440 dB
@@ -81,24 +81,24 @@ Delay Bandwidth     =         30.5490 MHz
 Transmission Delay  =         44.6989 ns
 Minimum Return Loss =         27.5983 dB
 Insertion Loss      =          2.0144 dB
-Unloaded QU         =       1400.0000
-Filter Loaded QL    =         85.5019
+Unloaded Qu         =       1400.0000
+Loaded Ql           =         85.5019
 Normalized Qo       =         16.3739
-Normalized and Denormalized Qi and Kij
-  q1      0.781350   |   Q1     66.806877
-  k12     0.970077   |   K12     0.011346
-  k23     0.659672   |   K23     0.007715
-  k34     0.620929   |   K34     0.007262
-  k45     0.659672   |   K45     0.007715
-  k56     0.970073   |   K56     0.011346
-  q6      0.781356   |   Q6     66.807423
+Normalized and Denormalized qi and kij
+  q1      0.781350              |   Q1     66.806877
+  k12     0.970077              |   K12     0.011346
+  k23     0.659672              |   K23     0.007715
+  k34     0.620929              |   K34     0.007262
+  k45     0.659672              |   K45     0.007715
+  k56     0.970073              |   K56     0.011346
+  q6      0.781356              |   Q6     66.807423
 Lossless Ness Group Delay and Return Loss
-  1              18.492 ns  -0.000 dB   |   6              18.492 ns  -0.000 dB
-  1 2            32.186 ns  -0.000 dB   |   6 5            32.186 ns  -0.000 dB
-  1 2 3          58.480 ns  -0.000 dB   |   6 5 4          58.480 ns  -0.000 dB
-  1 2 3 4        68.514 ns  -0.000 dB   |   6 5 4 3        68.514 ns  -0.000 dB
-  1 2 3 4 5      93.909 ns  -0.000 dB   |   6 5 4 3 2      93.909 ns  -0.000 dB
-  1 2 3 4 5 6    85.313 ns  -0.000 dB   |   6 5 4 3 2 1    85.313 ns  -0.000 dB
+  1              18.492 ns   0.000 dB   |   6              18.492 ns   0.000 dB
+  1 2            32.186 ns   0.000 dB   |   6 5            32.186 ns   0.000 dB
+  1 2 3          58.480 ns   0.000 dB   |   6 5 4          58.480 ns   0.000 dB
+  1 2 3 4        68.514 ns   0.000 dB   |   6 5 4 3        68.514 ns   0.000 dB
+  1 2 3 4 5      93.909 ns   0.000 dB   |   6 5 4 3 2      93.909 ns   0.000 dB
+  1 2 3 4 5 6    85.313 ns   0.000 dB   |   6 5 4 3 2 1    85.313 ns   0.000 dB
 Ness Group Delay and Return Loss (QU=1400.0)
   1              18.534 ns   0.830 dB   |   6              18.534 ns   0.830 dB
   1 2            32.025 ns   1.440 dB   |   6 5            32.025 ns   1.440 dB
@@ -128,6 +128,30 @@ For some filter types, like Bessel and Gaussian,
 there are no twin group delay peaks in S21
 so the predicted delay bandwidth value will be wrong.
 
+# Calculating QE, QU and K12 from Measurements
+
+Say you measure a return loss and a Ness group delay of
+.830 dB and 18.534 ns for the first resonantor of the above
+filter.  To calculate this resonator's QE and QU use:
+
+
+```
+$ rftune -f 2.3e9 --qequ .830 18.534
+QU =       1399.337
+QE =         66.808
+```
+
+
+Next, say, you measure a Ness group delay of 32.025 ns for the second resonator.
+To find k12 use:
+
+
+```
+$ rftune -f 2.3e9 --k12 .830 18.534 32.025
+K12 =    0.011346
+```
+
+
 # Usage
 
 
@@ -137,6 +161,7 @@ usage: rftune [-h] [-l] [-p] [-g] [-u QU] [-n NUMBER] [-f FREQUENCY]
               [-b BANDWIDTH] [--zo ZO] [--re RE] [--butterworth] [--bessel]
               [--legendre] [--chebyshev CHEBYSHEV] [--gaussian GAUSSIAN]
               [--linear-phase LINEAR_PHASE] [--ripple RIPPLE] [--validate]
+              [--qequ <RL1dB)> <TD1(ns)>] [--k12 <RL1(dB)> <TD1(ns)> <TD2(ns>]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -163,6 +188,12 @@ optional arguments:
   --ripple RIPPLE       use an arbitrary ripple lowpass Chebyshev filter
                         (default: None)
   --validate
+  --qequ <RL1(dB)> <TD1(ns)>
+                        calculate Qe and Qu using resonator 1 group delay and
+                        return loss (default: None)
+  --k12 <RL1(dB)> <TD1(ns)> <TD2(ns)>
+                        calculate k12 using resonator 1 and 2 group delay and
+                        return loss (default: None)
 ```
 
 

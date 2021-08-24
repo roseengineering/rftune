@@ -11,7 +11,7 @@ from ness import (
     nodal_delay_bandwidth, nodal_bandwidth, 
     nodal_delay_transmission, nodal_returnloss, nodal_insertionloss,
     groupdelay_maqu, groupdelay_tdqu, groupdelay_qk,
-    chebyshev,
+    chebyshev, qequ_groupdelay, k12_groupdelay,
     # when re != zo
     fn_nodal_transmission, groupdelay,
 )
@@ -41,8 +41,11 @@ def parse_args():
     parser.add_argument("--linear-phase", type=float, help='use a Linear phase filter')
     parser.add_argument("--ripple", type=float, help='use an arbitrary ripple lowpass Chebyshev filter')
     parser.add_argument("--validate", action='store_true')
+    parser.add_argument("--qequ", nargs=2, metavar=('<RL1(dB)>', '<TD1(ns)>',), type=float,
+                        help='calculate Qe and Qu using resonator 1 group delay and return loss')
+    parser.add_argument("--k12", nargs=3, metavar=('<RL1(dB)>', '<TD1(ns)>', '<TD2(ns)>'), type=float,
+                        help='calculate k12 using resonator 1 and 2 group delay and return loss')
     return parser.parse_args()
-
 
 
 def list_qk(qk, bw, fo):
@@ -51,7 +54,7 @@ def list_qk(qk, bw, fo):
         name1, name2 = f'k{i}{i+1}', f'K{i}{i+1}'
         if i == 0: name1, name2, = 'q1', 'Q1'
         if i == len(QK)-1: name1, name2 = f'q{i}', f'Q{i}'
-        print('  {:3s}  {:11.6f}   |   {:3s}  {:11.6f}'
+        print('  {:3s}  {:11.6f}              |   {:3s}  {:11.6f}'
               .format(name1, qk[i], name2, QK[i]))
 
 
@@ -62,8 +65,8 @@ def list_groupdelays(TD1, TD2, MA1, MA2):
         res1 = ' '.join([ str(i) for i in range(1, n+2) ])
         res2 = ' '.join([ str(i) for i in range(N, N-n-1, -1) ])
         print('  {} {:9.3f} ns {:7.3f} dB   |   {} {:9.3f} ns {:7.3f} dB'.format(
-              res1.ljust(width), TD1[n] * 1e9, -db(MA1[n]),
-              res2.ljust(width), TD2[n] * 1e9, -db(MA2[n])))
+              res1.ljust(width), TD1[n] * 1e9, db(1/MA1[n]),
+              res2.ljust(width), TD2[n] * 1e9, db(1/MA2[n])))
 
 
 def find_filter(table, name, value=None):
@@ -80,6 +83,27 @@ def main():
     bw = args.bandwidth
     fo = args.frequency
     qu = args.qu
+
+    if (args.qequ or args.k12) and not fo: 
+        print("Center frequency not set.")
+        return
+
+    if args.qequ:
+        ma1 = 10**(-args.qequ[0] / 20)
+        td1 = args.qequ[1] * 1e-9
+        qe, qu = qequ_groupdelay(fo, td1, ma1)
+        print('QU = {:14.3f}'.format(qu))
+        print('QE = {:14.3f}'.format(qe))
+        return
+
+    if args.k12:
+        ma1 = 10**(-args.k12[0] / 20)
+        td1 = args.k12[1] * 1e-9
+        td2 = args.k12[2] * 1e-9
+        k12 = k12_groupdelay(fo, td1, td2, ma1)
+        print('K12 = {:11.6f}'.format(k12))
+        return
+
 
     if args.g:
         table = LOWPASS
@@ -107,7 +131,7 @@ def main():
         res = find_filter(table, 'LINEAR PHASE', args.linear_phase) 
     elif args.ripple:
         if not args.number:
-            print("Please set the number of poles")
+            print("Number of poles not set.")
             return
         args.g = True
         res = ('Chebyshev {} dB'.format(args.ripple), 
@@ -171,10 +195,10 @@ def main():
             print('Minimum Return Loss = {:15.4f} dB'.format(rl))
             il = nodal_insertionloss(qk, bw, fo, qu) # step
             print('Insertion Loss      = {:15.4f} dB'.format(il))
-            print('Unloaded QU         = {:15.4f}'.format(qu))
-            print('Filter Loaded QL    = {:15.4f}'.format(fo / bw))
+            print('Unloaded Qu         = {:15.4f}'.format(qu))
+            print('Loaded Ql           = {:15.4f}'.format(fo / bw))
             print('Normalized Qo       = {:15.4f}'.format(qu / (fo / bw)))
-            print('Normalized and Denormalized Qi and Kij')
+            print('Normalized and Denormalized qi and kij')
             list_qk(qk, bw, fo)
 
         if bw:
@@ -218,7 +242,6 @@ def main():
                 print('  Empirical QE{}            {:15.4f}'.format(N, QE2))
 
             if args.validate:
-                from ness import qequ_groupdelay, k12_groupdelay
                 print('Validation')
                 qe1, qu1 = qequ_groupdelay(fo, TD1[0], MA1[0])
                 qe2, qu2 = qequ_groupdelay(fo, TD2[0], MA2[0])
