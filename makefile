@@ -28,8 +28,7 @@ zip: clean
 	cd ..; zip -r -FS ~/apps/${repo} ${repo}
 
 push: clean
-	git push
-	git gc
+	test "$(shell git push 2>&1)" = "Everything up-to-date" || git gc
 
 run: rftune
 	./rftune -n 2 --but -f 2.3e9 -b 26.9e6
