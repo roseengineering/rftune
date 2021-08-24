@@ -28,7 +28,8 @@ zip: clean
 	cd ..; zip -r -FS ~/apps/${repo} ${repo}
 
 push: clean
-	$(if $(shell git status --porcelain), git push && git gc,)
+	git push
+	git gc
 
 run: rftune
 	./rftune -n 2 --but -f 2.3e9 -b 26.9e6
