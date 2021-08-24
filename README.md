@@ -137,8 +137,8 @@ filter.  To calculate this resonator's QE and QU use:
 
 ```
 $ rftune -f 2.3e9 --qequ .830 18.534
-QU =       1399.337
-QE =         66.808
+QU =    1399.337
+QE =      66.808
 ```
 
 
@@ -148,6 +148,8 @@ To find k12 use:
 
 ```
 $ rftune -f 2.3e9 --k12 .830 18.534 32.025
+QU  =    1399.337
+QE  =      66.808
 K12 =    0.011346
 ```
 

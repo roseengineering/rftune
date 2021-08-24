@@ -92,15 +92,18 @@ def main():
         ma1 = 10**(-args.qequ[0] / 20)
         td1 = args.qequ[1] * 1e-9
         qe, qu = qequ_groupdelay(fo, td1, ma1)
-        print('QU = {:14.3f}'.format(qu))
-        print('QE = {:14.3f}'.format(qe))
+        print('QU = {:11.3f}'.format(qu))
+        print('QE = {:11.3f}'.format(qe))
         return
 
     if args.k12:
         ma1 = 10**(-args.k12[0] / 20)
         td1 = args.k12[1] * 1e-9
         td2 = args.k12[2] * 1e-9
+        qe, qu = qequ_groupdelay(fo, td1, ma1)
         k12 = k12_groupdelay(fo, td1, td2, ma1)
+        print('QU  = {:11.3f}'.format(qu))
+        print('QE  = {:11.3f}'.format(qe))
         print('K12 = {:11.6f}'.format(k12))
         return
 
