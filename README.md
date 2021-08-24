@@ -45,12 +45,12 @@ Normalized and Denormalized Qi and Kij
   k56     0.970073   |   K56     0.011346
   q6      0.781356   |   Q6     66.807423
 Lossless Ness Group Delay and Return Loss
-  1              18.492 ns   0.000 dB   |   6              18.492 ns   0.000 dB
-  1 2            32.186 ns   0.000 dB   |   6 5            32.186 ns   0.000 dB
-  1 2 3          58.480 ns   0.000 dB   |   6 5 4          58.480 ns   0.000 dB
-  1 2 3 4        68.514 ns   0.000 dB   |   6 5 4 3        68.514 ns   0.000 dB
-  1 2 3 4 5      93.909 ns   0.000 dB   |   6 5 4 3 2      93.909 ns   0.000 dB
-  1 2 3 4 5 6    85.313 ns   0.000 dB   |   6 5 4 3 2 1    85.313 ns   0.000 dB
+  1              18.492 ns  -0.000 dB   |   6              18.492 ns  -0.000 dB
+  1 2            32.186 ns  -0.000 dB   |   6 5            32.186 ns  -0.000 dB
+  1 2 3          58.480 ns  -0.000 dB   |   6 5 4          58.480 ns  -0.000 dB
+  1 2 3 4        68.514 ns  -0.000 dB   |   6 5 4 3        68.514 ns  -0.000 dB
+  1 2 3 4 5      93.909 ns  -0.000 dB   |   6 5 4 3 2      93.909 ns  -0.000 dB
+  1 2 3 4 5 6    85.313 ns  -0.000 dB   |   6 5 4 3 2 1    85.313 ns  -0.000 dB
 Ness Group Delay and Return Loss (QU=1400.0)
   1              18.534 ns   0.830 dB   |   6              18.534 ns   0.830 dB
   1 2            32.025 ns   1.440 dB   |   6 5            32.025 ns   1.440 dB
@@ -93,12 +93,12 @@ Normalized and Denormalized Qi and Kij
   k56     0.970073   |   K56     0.011346
   q6      0.781356   |   Q6     66.807423
 Lossless Ness Group Delay and Return Loss
-  1              18.492 ns   0.000 dB   |   6              18.492 ns   0.000 dB
-  1 2            32.186 ns   0.000 dB   |   6 5            32.186 ns   0.000 dB
-  1 2 3          58.480 ns   0.000 dB   |   6 5 4          58.480 ns   0.000 dB
-  1 2 3 4        68.514 ns   0.000 dB   |   6 5 4 3        68.514 ns   0.000 dB
-  1 2 3 4 5      93.909 ns   0.000 dB   |   6 5 4 3 2      93.909 ns   0.000 dB
-  1 2 3 4 5 6    85.313 ns   0.000 dB   |   6 5 4 3 2 1    85.313 ns   0.000 dB
+  1              18.492 ns  -0.000 dB   |   6              18.492 ns  -0.000 dB
+  1 2            32.186 ns  -0.000 dB   |   6 5            32.186 ns  -0.000 dB
+  1 2 3          58.480 ns  -0.000 dB   |   6 5 4          58.480 ns  -0.000 dB
+  1 2 3 4        68.514 ns  -0.000 dB   |   6 5 4 3        68.514 ns  -0.000 dB
+  1 2 3 4 5      93.909 ns  -0.000 dB   |   6 5 4 3 2      93.909 ns  -0.000 dB
+  1 2 3 4 5 6    85.313 ns  -0.000 dB   |   6 5 4 3 2 1    85.313 ns  -0.000 dB
 Ness Group Delay and Return Loss (QU=1400.0)
   1              18.534 ns   0.830 dB   |   6              18.534 ns   0.830 dB
   1 2            32.025 ns   1.440 dB   |   6 5            32.025 ns   1.440 dB
@@ -136,7 +136,7 @@ $ rftune -h
 usage: rftune [-h] [-l] [-p] [-g] [-u QU] [-n NUMBER] [-f FREQUENCY]
               [-b BANDWIDTH] [--zo ZO] [--re RE] [--butterworth] [--bessel]
               [--legendre] [--chebyshev CHEBYSHEV] [--gaussian GAUSSIAN]
-              [--linear-phase LINEAR_PHASE] [--validate]
+              [--linear-phase LINEAR_PHASE] [--ripple RIPPLE] [--validate]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -152,12 +152,16 @@ optional arguments:
                         bandwidth (default: None)
   --zo ZO               line impedance (default: 50.0)
   --re RE               filter impedance (default: 50.0)
-  --butterworth
-  --bessel
-  --legendre
+  --butterworth         use a Butterworth filter (default: False)
+  --bessel              use a Bessel filter (default: False)
+  --legendre            use a Lengendre filter (default: False)
   --chebyshev CHEBYSHEV
-  --gaussian GAUSSIAN
+                        use a Chebyshev filter (default: None)
+  --gaussian GAUSSIAN   use a Gaussian filter (default: None)
   --linear-phase LINEAR_PHASE
+                        use a Linear phase filter (default: None)
+  --ripple RIPPLE       use an arbitrary ripple lowpass Chebyshev filter
+                        (default: None)
   --validate
 ```
 

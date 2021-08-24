@@ -15,7 +15,7 @@ install:
 	sudo cp rftune /usr/local/bin
 
 clean:
-	rm -rf .ipynb_checkpoints/ *.dat *.lst rftune.*
+	rm -rf */.ipynb_checkpoints/ .ipynb_checkpoints/ *.dat *.lst rftune.*
 
 distclean:
 	rm -f rftune README.md

@@ -11,6 +11,7 @@ from ness import (
     nodal_delay_bandwidth, nodal_bandwidth, 
     nodal_delay_transmission, nodal_returnloss, nodal_insertionloss,
     groupdelay_maqu, groupdelay_tdqu, groupdelay_qk,
+    chebyshev,
     # when re != zo
     fn_nodal_transmission, groupdelay,
 )
@@ -32,12 +33,13 @@ def parse_args():
     parser.add_argument("-b", "--bandwidth", type=float, help='bandwidth')
     parser.add_argument("--zo", type=float, default=50.0, help='line impedance')
     parser.add_argument("--re", type=float, default=50.0, help='filter impedance')
-    parser.add_argument("--butterworth", action="store_true")
-    parser.add_argument("--bessel", action="store_true")
-    parser.add_argument("--legendre", action="store_true")
-    parser.add_argument("--chebyshev", type=float)
-    parser.add_argument("--gaussian", type=float)
-    parser.add_argument("--linear-phase", type=float)
+    parser.add_argument("--butterworth", action="store_true", help='use a Butterworth filter')
+    parser.add_argument("--bessel", action="store_true", help='use a Bessel filter')
+    parser.add_argument("--legendre", action="store_true", help='use a Lengendre filter')
+    parser.add_argument("--chebyshev", type=float, help='use a Chebyshev filter')
+    parser.add_argument("--gaussian", type=float, help='use a Gaussian filter')
+    parser.add_argument("--linear-phase", type=float, help='use a Linear phase filter')
+    parser.add_argument("--ripple", type=float, help='use an arbitrary ripple lowpass Chebyshev filter')
     parser.add_argument("--validate", action='store_true')
     return parser.parse_args()
 
@@ -103,6 +105,13 @@ def main():
         res = find_filter(table, 'GAUSSIAN', args.gaussian) 
     elif args.linear_phase:
         res = find_filter(table, 'LINEAR PHASE', args.linear_phase) 
+    elif args.ripple:
+        if not args.number:
+            print("Please set the number of poles")
+            return
+        args.g = True
+        res = ('Chebyshev {} dB'.format(args.ripple), 
+               [chebyshev(args.number, args.ripple)]) 
     else:
         print('No filter type specified.')
         return
@@ -133,8 +142,12 @@ def main():
     for d in data:
         name = d.get('name')
         qo = d.get('qo')
-        qk = d.get('qk') or coupling_g(d['g'])
-        g = d.get('g') or prototype_qk(d['qk'])
+        if 'qk' in d:
+            qk = d['qk']
+            g = prototype_qk(qk)
+        else:
+            g = d['g']
+            qk = coupling_g(g)
         N = len(g) - 2
 
         if count: print()
@@ -171,7 +184,7 @@ def main():
             MA = np.ones(len(TD1))
             list_groupdelays(TD1, TD2, MA, MA)
 
-        if bw and fo:
+        if bw and fo and not np.isinf(qu):
             print('Ness Group Delay and Return Loss (QU={})'.format(qu))
             MA1 = groupdelay_maqu(g, bw, fo, qu)
             TD1 = groupdelay_tdqu(g, bw, fo, qu)
@@ -204,7 +217,7 @@ def main():
                 print('  Empirical QE{}            {:15.4f}'.format(1, QE1))
                 print('  Empirical QE{}            {:15.4f}'.format(N, QE2))
 
-            if args.validate: # and not np.isinf(qu):
+            if args.validate:
                 from ness import qequ_groupdelay, k12_groupdelay
                 print('Validation')
                 qe1, qu1 = qequ_groupdelay(fo, TD1[0], MA1[0])
