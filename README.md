@@ -26,8 +26,8 @@ $ rftune -g --cheb .01 -n 6 -f 2.3e9 -b 26.9e6 -u 1400
 ---------------------------------------
        6 Pole Chebyshev 0.01 dB        
 ---------------------------------------
-Design Bandwidth    =         26.9000 MHz
 Center Frequency    =       2300.0000 MHz
+Design Bandwidth    =         26.9000 MHz
 Delay Bandwidth     =         30.5490 MHz
 3dB Bandwidth       =         30.5600 MHz
 Transmission Delay  =         44.6989 ns
@@ -74,8 +74,8 @@ $ rftune -g --cheb .01 -n 6 -f 2.3e9 -b 26.9e6 -u 1400 --re 100
 ---------------------------------------
        6 Pole Chebyshev 0.01 dB        
 ---------------------------------------
-Design Bandwidth    =         26.9000 MHz
 Center Frequency    =       2300.0000 MHz
+Design Bandwidth    =         26.9000 MHz
 Delay Bandwidth     =         30.5490 MHz
 3dB Bandwidth       =         30.5600 MHz
 Transmission Delay  =         44.6989 ns

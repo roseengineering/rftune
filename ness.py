@@ -408,7 +408,7 @@ def fn_lowpass_transmission(g, fo):
 def lowpass_groupdelay(g, fo, qu, steps=1000):
     fp = []
     td = []
-    f = np.linspace(fo / 10, 2 * fo, steps)
+    f = np.linspace(0, 2 * fo, steps)
     for n in range(2, len(g)-1):
         fn = fn_lowpass_reflection(g, fo, n)
         tdqu = groupdelay(fn, f, qu)
@@ -418,7 +418,7 @@ def lowpass_groupdelay(g, fo, qu, steps=1000):
 
 
 def lowpass_bandwidth(g, fo, qu, steps=1000):
-    f = np.linspace(fo / 10, 2 * fo, steps)
+    f = np.linspace(0, 2 * fo, steps)
     fn = fn_lowpass_transmission(g, fo)
     tdqu = groupdelay(fn, f, qu)
     a = np.argmax(tdqu)

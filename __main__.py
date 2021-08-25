@@ -111,7 +111,6 @@ def main():
         print('K12 = {:11.6f}'.format(k12))
         return
 
-
     if args.g:
         table = LOWPASS
     elif args.predistorted:
@@ -122,6 +121,10 @@ def main():
     if args.list:
         for name in table:
             print(name)
+        return
+
+    if not args.number:
+        print("Number of poles not set.")
         return
 
     # pull tables
@@ -138,9 +141,6 @@ def main():
     elif args.linear_phase:
         res = find_filter(table, 'LINEAR PHASE', args.linear_phase) 
     elif args.max_ripple or args.max_swr or args.max_rc:
-        if not args.number:
-            print("Number of poles not set.")
-            return
         args.g = True
         if args.max_swr:
             swr = args.max_swr
@@ -182,22 +182,7 @@ def main():
         if args.number is None or args.number == n:
             data.append(d)
 
-    # analyze lowpass filters
-    if args.lowpass:
-        fp, td = lowpass_groupdelay(g, fo, qu)
-        print('Ness Group Delay of Low Pass Filter (QU={})'
-              .format(qu))
-        for i in range(len(fp)):
-            print('  TD{}  {:11.3f} ns     peak at {:11.4f} MHz '
-                  .format(i+2, td[i] * 1e9, fp[i] / 1e6))
-        fpeak, tdpeak = lowpass_bandwidth(g, fo, qu)
-        print('Group Delay Peak Of Terminated Low Pass Filter (QU={})'
-              .format(qu))
-        print('       {:11.3f} ns     peak at {:11.4f} MHz '
-              .format(tdpeak * 1e9, fpeak / 1e6))
-        return
-
-    # analyze bandpass filters
+    # analyze filters
     count = 0
     for d in data:
         name = d.get('name')
@@ -213,10 +198,23 @@ def main():
         print('---------------------------------------')
         if qo:
             print('Predistored Q0      = {:>15}'.format(str(qo)))
+        if fo:
+            print('Center Frequency    = {:15.4f} MHz'.format(fo / 1e6))
+        if args.lowpass:
+            fp, td = lowpass_groupdelay(g, fo, qu)
+            print('Ness Group Delay of Low Pass Filter (QU={})'.format(qu))
+            for i in range(len(fp)):
+                print('  TD{}  {:11.3f} ns     peak at {:11.4f} MHz '
+                      .format(i+2, td[i] * 1e9, fp[i] / 1e6))
+            fpeak, tdpeak = lowpass_bandwidth(g, fo, qu)
+            print('Group Delay Peak Of Terminated Low Pass Filter (QU={})'.format(qu))
+            print('       {:11.3f} ns     peak at {:11.4f} MHz '
+                  .format(tdpeak * 1e9, fpeak / 1e6))
+            continue
+
         if bw:
             print('Design Bandwidth    = {:15.4f} MHz'.format(bw / 1e6))
         if bw and fo:
-            print('Center Frequency    = {:15.4f} MHz'.format(fo / 1e6))
             bwtd = nodal_delay_bandwidth(qk, bw, fo, qu) # step
             print('Delay Bandwidth     = {:15.4f} MHz'.format(bwtd / 1e6))
             bwdb = nodal_bandwidth(qk, bw, fo, qu) # step
