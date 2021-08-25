@@ -28,11 +28,11 @@ $ rftune -g --cheb .01 -n 6 -f 2.3e9 -b 26.9e6 -u 1400
 ---------------------------------------
 Center Frequency    =       2300.0000 MHz
 Design Bandwidth    =         26.9000 MHz
-Delay Bandwidth     =         30.5490 MHz
+Delay Bandwidth     =         30.5502 MHz
 3dB Bandwidth       =         30.5600 MHz
 Transmission Delay  =         44.6989 ns
 Minimum Return Loss =         27.5983 dB
-Insertion Loss      =          2.0144 dB
+Insertion Loss      =          2.0044 dB
 Unloaded QU         =       1400.0000
 Loaded QL           =         85.5019
 Normalized Q0       =         16.3739
@@ -76,11 +76,11 @@ $ rftune -g --cheb .01 -n 6 -f 2.3e9 -b 26.9e6 -u 1400 --re 100
 ---------------------------------------
 Center Frequency    =       2300.0000 MHz
 Design Bandwidth    =         26.9000 MHz
-Delay Bandwidth     =         30.5490 MHz
+Delay Bandwidth     =         30.5502 MHz
 3dB Bandwidth       =         30.5600 MHz
 Transmission Delay  =         44.6989 ns
 Minimum Return Loss =         27.5983 dB
-Insertion Loss      =          2.0144 dB
+Insertion Loss      =          2.0044 dB
 Unloaded QU         =       1400.0000
 Loaded QL           =         85.5019
 Normalized Q0       =         16.3739
