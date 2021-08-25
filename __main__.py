@@ -10,8 +10,9 @@ from ness import (
     prototype_qk, denormalize_qk, coupling_g, db,
     nodal_delay_bandwidth, nodal_bandwidth, 
     nodal_delay_transmission, nodal_returnloss, nodal_insertionloss,
-    groupdelay_maqu, groupdelay_tdqu, groupdelay_qk,
-    chebyshev, qequ_groupdelay, k12_groupdelay,
+    groupdelay_maqu, groupdelay_tdqu, groupdelay_lowpass,
+    groupdelay_qk,
+    chebyshev, qequ_groupdelay, k12_groupdelay, 
     # when re != zo
     fn_nodal_transmission, groupdelay,
 )
@@ -123,6 +124,7 @@ def main():
             print(name)
         return
 
+    # pull tables
     if args.butterworth:
         res = find_filter(table, 'BUTTERWORTH')
     elif args.bessel:
@@ -155,7 +157,7 @@ def main():
         print('No filter type specified.')
         return
 
-    # translate tables
+    # collect data
     name, values = res
     data = []
     for row in values:
@@ -180,7 +182,15 @@ def main():
         if args.number is None or args.number == n:
             data.append(d)
 
-    # analyze filters
+    # analyze lowpass filters
+    if args.lowpass:
+        fp, td = groupdelay_lowpass(g, fo, qu)
+        for i in range(len(fp)):
+            print('  TD{}  {:11.3f} ns     peak at {:11.4f} MHz '
+                  .format(i+2, td[i] * 1e9, fp[i] / 1e6))
+        return
+
+    # analyze bandpass filters
     count = 0
     for d in data:
         name = d.get('name')

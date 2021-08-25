@@ -382,8 +382,8 @@ def groupdelay_tdqu(g, bw, fo, qu):
 
 
 def groupdelay_lowpass(g, fo, qu, steps=1000):
-    fp = [ np.nan ]
-    td = [ np.nan ]
+    fp = []
+    td = []
     f = np.linspace(fo / 10, 2 * fo, steps)
     for n in range(2, len(g)-2):
         fn = fn_lowpass_maqu(g, fo, n)
