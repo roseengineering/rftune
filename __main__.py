@@ -46,7 +46,7 @@ def parse_args():
     parser.add_argument("--validate", action='store_true', help='validate results against k12')
     parser.add_argument("--lowpass", action='store_true', help='predicted lowpass characteristics')
     parser.add_argument("--qequ", nargs=2, metavar=('<RL1(dB)>', '<TD1(ns)>',), type=float,
-                        help='calculate Qe and Qu using resonator 1 group delay and return loss')
+                        help='calculate QE and QU using resonator 1 group delay and return loss')
     parser.add_argument("--k12", nargs=3, metavar=('<RL1(dB)>', '<TD1(ns)>', '<TD2(ns)>'), type=float,
                         help='calculate k12 using resonator 1 and 2 group delay and return loss')
     return parser.parse_args()
@@ -185,10 +185,16 @@ def main():
     # analyze lowpass filters
     if args.lowpass:
         fp, td = lowpass_groupdelay(g, fo, qu)
+        print('Ness Group Delay of Low Pass Filter (QU={})'
+              .format(qu))
         for i in range(len(fp)):
             print('  TD{}  {:11.3f} ns     peak at {:11.4f} MHz '
                   .format(i+2, td[i] * 1e9, fp[i] / 1e6))
-        # print(lowpass_bandwidth(g, fo, qu))
+        fpeak, tdpeak = lowpass_bandwidth(g, fo, qu)
+        print('Group Delay Peak Of Terminated Low Pass Filter (QU={})'
+              .format(qu))
+        print('       {:11.3f} ns     peak at {:11.4f} MHz '
+              .format(tdpeak * 1e9, fpeak / 1e6))
         return
 
     # analyze bandpass filters
@@ -206,7 +212,7 @@ def main():
         print('{:^39}'.format('{} Pole {}'.format(N, name)))
         print('---------------------------------------')
         if qo:
-            print('Predistored Qo      = {:>15}'.format(str(qo)))
+            print('Predistored Q0      = {:>15}'.format(str(qo)))
         if bw:
             print('Design Bandwidth    = {:15.4f} MHz'.format(bw / 1e6))
         if bw and fo:
@@ -221,9 +227,9 @@ def main():
             print('Minimum Return Loss = {:15.4f} dB'.format(rl))
             il = nodal_insertionloss(qk, bw, fo, qu) # step
             print('Insertion Loss      = {:15.4f} dB'.format(il))
-            print('Unloaded Qu         = {:15.4f}'.format(qu))
-            print('Loaded Ql           = {:15.4f}'.format(fo / bw))
-            print('Normalized Qo       = {:15.4f}'.format(qu / (fo / bw)))
+            print('Unloaded QU         = {:15.4f}'.format(qu))
+            print('Loaded QL           = {:15.4f}'.format(fo / bw))
+            print('Normalized Q0       = {:15.4f}'.format(qu / (fo / bw)))
             print('Normalized and Denormalized qi and kij')
             list_qk(qk, bw, fo)
 

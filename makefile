@@ -39,11 +39,9 @@ repo = $(shell basename `pwd`)
 zip: clean
 	cd ..; zip -r -FS ~/apps/${repo} ${repo}
 
-run: rftune lowpass
+run: rftune
 	./rftune -n 2 --but -f 2.3e9 -b 26.9e6
 	./rftune -n 2 --cheb 0.01 -f 7.1e6 -b 200e3 --qu 800 --validate 
-
-lowpass:
-	./rftune -f 7.36e6 --max-swr 1.039 --lowpass -n 7
+	./rftune -f 7.36e6 --max-swr 1.039 --lowpass -n 7 -u 100
 
 .PHONY: zip run

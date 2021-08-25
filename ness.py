@@ -387,23 +387,21 @@ def fn_lowpass_reflection(g, fo, n):
 
 
 def fn_lowpass_transmission(g, fo):
-    f, w, wo, wp, qu = sy.symbols("f w wo wp qu")
+    f, wp, qu = sy.symbols("f wp qu")
     vin = 1
     zin = g[0]
-    for i in range(1, len(g)):
+    for i in range(1, len(g)-1):
         G = wp * g[i] * sy.I
         if i % 2:
-            zin += G + wp * g[i] / qu
-        else:
             a = 1 / G
             vin = vin * a / (a + zin)
             zin = 1 / (1 / a + 1 / zin)
-    zin = zin.subs(wp, w / wo)
-    zin = zin.subs(wo, 2 * sy.pi * fo)
-    zin = zin.subs(w, 2 * np.pi * f)
+        else:
+            zin += G + wp * g[i] / qu
     s21 = 2 * vin * g[-1] / (zin + g[-1])
+    s21 = s21.subs(wp, f / fo)
     return sy.lambdify([f, qu], s21, 'numpy')
-
+                       
 
 ### approximations
 
