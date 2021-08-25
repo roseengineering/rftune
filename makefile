@@ -3,7 +3,7 @@ src = coupled.py lowpass.py __main__.py ness.py zverev.py
 all: rftune README.md
 
 rftune: ${src}
-	python -m zipfile -c rftune.zip ${src}
+	python -m zipfile -c rftune.zip $^
 	echo '#!/usr/bin/python3' | cat - rftune.zip > rftune
 	rm rftune.zip
 	chmod 755 rftune
@@ -11,10 +11,13 @@ rftune: ${src}
 README.md: readme.py
 	make readme
 
-##
+.PHONY: all push readme install clean distclean
 
-diff:
-	python3 readme.py | diff - README.md
+############################################
+
+diff: all
+	python3 readme.py | diff README.md -
+
 push: clean diff
 	test "$(shell git push 2>&1)" = "Everything up-to-date" || git gc
 
@@ -39,7 +42,7 @@ repo = $(shell basename `pwd`)
 zip: clean
 	cd ..; zip -r -FS ~/apps/${repo} ${repo}
 
-run: rftune
+run: all
 	./rftune -n 2 --but -f 2.3e9 -b 26.9e6
 	./rftune -n 2 --cheb 0.01 -f 7.1e6 -b 200e3 --qu 800 --validate 
 	./rftune -f 7.36e6 --max-swr 1.039 --lowpass -n 7 -u 100

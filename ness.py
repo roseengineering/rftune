@@ -1,6 +1,7 @@
 
 import numpy as np
 import sympy as sy
+from scipy.optimize import minimize
 
 
 # cohn approximation of insertion loss
@@ -201,7 +202,7 @@ def fn_nodal_transmission(qk, fo, bw, re=1):
 # calculate the insertion loss of a filter at fo
 def nodal_insertionloss(qk, bw, fo, qu):
     fn = fn_nodal_transmission(qk, bw, fo)
-    return -db(fn(fo, qu))
+    return db(fn(fo, np.inf)) - db(fn(fo, qu))
 
 
 # calculate the transmission group delay of a filter at fo
@@ -224,21 +225,37 @@ def nodal_returnloss(qk, bw, fo, qu, steps=1000):
 # approximate the group delay bandwidth of a filter
 def nodal_delay_bandwidth(qk, bw, fo, qu, steps=1000):
     fn = fn_nodal_transmission(qk, bw, fo)
+    ###
     f = np.linspace(fo - bw, fo + bw, int(2 * bw / steps + 1))
     td = groupdelay(fn, f, qu)
     a = np.diff(np.sign(np.diff(td))).nonzero()[0] + 1
-    return f[a[-1]] - f[a[0]]
+    f1 = f[a[0]]
+    f2 = f[a[-1]]
+    ###
+    res = minimize(lambda x: -groupdelay(fn, x, qu), f1, method='Nelder-Mead')
+    f1 = res.x[0] if res.success else np.nan
+    res = minimize(lambda x: -groupdelay(fn, x, qu), f2, method='Nelder-Mead')
+    f2 = res.x[0] if res.success else np.nan
+    return f2 - f1
 
 
 # approximate the 3db bandwidth of a filter
 def nodal_bandwidth(qk, bw, fo, qu, cutoff=3.0103, steps=1000):
     fn = fn_nodal_transmission(qk, bw, fo)
+    ###
     f = np.linspace(fo - bw, fo + bw, int(2 * bw / steps + 1))
     ma = db(fn(f, qu))
-    ma -= np.max(ma)
-    a = (np.diff(np.sign(np.diff(abs(ma + cutoff)))) > 0).nonzero()[0] + 1
-    return f[a[-1]] - f[a[0]]
-
+    mamax = np.max(ma)
+    a = (np.diff(np.sign(np.diff(abs(ma - mamax + cutoff)))) > 0).nonzero()[0] + 1
+    f1 = f[a[0]]
+    f2 = f[a[-1]]
+    ###
+    # print((f2 - f1) / 1e6)
+    # res = minimize(lambda x: -abs(db(fn(x, qu) - mamax + cutoff)), f1, method='Nelder-Mead')
+    # f1 = res.x[0] if res.success else np.nan
+    # res = minimize(lambda x: -abs(db(fn(x, qu) - mamax + cutoff)), f2, method='Nelder-Mead')
+    # f2 = res.x[0] if res.success else np.nan
+    return f2 - f1
 
 #######################
 # lossless groupdelay
@@ -408,20 +425,31 @@ def fn_lowpass_transmission(g, fo):
 def lowpass_groupdelay(g, fo, qu, steps=1000):
     fp = []
     td = []
-    f = np.linspace(0, 2 * fo, steps)
     for n in range(2, len(g)-1):
         fn = fn_lowpass_reflection(g, fo, n)
+        ###
+        f = np.linspace(0, 2 * fo, steps)
         tdqu = groupdelay(fn, f, qu)
-        fp.append(f[np.argmax(tdqu)])
-        td.append(np.max(tdqu))
+        fmax = f[np.argmax(tdqu)]
+        ###
+        res = minimize(lambda x: -groupdelay(fn, x, qu), fmax, method='Nelder-Mead')
+        fmax = res.x[0] if res.success else np.nan
+        peak = -res.fun if res.success else np.nan
+        fp.append(fmax)
+        td.append(peak)
     return fp, td
 
 
 def lowpass_bandwidth(g, fo, qu, steps=1000):
-    f = np.linspace(0, 2 * fo, steps)
     fn = fn_lowpass_transmission(g, fo)
+    ###
+    f = np.linspace(0, 2 * fo, steps)
     tdqu = groupdelay(fn, f, qu)
-    a = np.argmax(tdqu)
-    return f[a], tdqu[a]
+    fmax = f[np.argmax(tdqu)]
+    ###
+    res = minimize(lambda x: -groupdelay(fn, x, qu), fmax, method='Nelder-Mead')
+    fmax = res.x[0] if res.success else np.nan
+    peak = -res.fun if res.success else np.nan
+    return fmax, peak
 
 
