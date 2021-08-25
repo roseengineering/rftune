@@ -270,6 +270,18 @@ def nodal_delay_transmission(qk, bw, fo, qu):
 # approximations
 #######################
     
+def groupdelay_lowpass(g, fo, qu, steps=1000):
+    fp = []
+    td = []
+    f = np.linspace(fo / 10, 2 * fo, steps)
+    for n in range(2, len(g)-1):
+        fn = fn_lowpass_maqu(g, fo, n)
+        tdqu = groupdelay(fn, f, qu)
+        fp.append(f[np.argmax(tdqu)])
+        td.append(np.max(tdqu))
+    return fp, td
+
+
 # calculate the (approximate) minimum return loss of a filter
 def nodal_returnloss(qk, bw, fo, qu, steps=1000):
     fn = fn_nodal_reflection(qk, bw, fo)
@@ -379,17 +391,5 @@ def groupdelay_tdqu(g, bw, fo, qu):
         GD = GD.subs(dw, 2 * sy.pi * bw)
         td.append(float(GD.evalf()))
     return np.array(td)
-
-
-def groupdelay_lowpass(g, fo, qu, steps=1000):
-    fp = []
-    td = []
-    f = np.linspace(fo / 10, 2 * fo, steps)
-    for n in range(2, len(g)-2):
-        fn = fn_lowpass_maqu(g, fo, n)
-        tdqu = groupdelay(fn, f, qu)
-        fp.append(f[np.argmax(tdqu)])
-        td.append(np.max(tdqu))
-    return fp, td
 
 
