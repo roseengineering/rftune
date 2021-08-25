@@ -7,14 +7,14 @@ from zverev import ZVEREV
 from lowpass import LOWPASS
 
 from ness import (
-    prototype_qk, denormalize_qk, coupling_g, db,
-    nodal_delay_bandwidth, nodal_bandwidth, 
-    nodal_delay_transmission, nodal_returnloss, nodal_insertionloss,
-    groupdelay_maqu, groupdelay_tdqu, groupdelay_lowpass,
-    groupdelay_qk,
-    chebyshev, qequ_groupdelay, k12_groupdelay, 
-    # when re != zo
-    fn_nodal_transmission, groupdelay,
+    prototype_qk, denormalize_qk, coupling_g, db, chebyshev,   # helpers
+    nodal_delay_transmission, nodal_insertionloss,             # measurements at fo
+    nodal_returnloss, nodal_delay_bandwidth, nodal_bandwidth,  # approximations
+    lowpass_groupdelay, lowpass_bandwidth,                     # approximations
+    groupdelay_maqu, groupdelay_tdqu,   # lossy
+    groupdelay_qk,                      # lossless
+    qequ_groupdelay, k12_groupdelay,    # validation
+    fn_nodal_transmission, groupdelay,  # when re != zo
 )
 
 
@@ -184,10 +184,11 @@ def main():
 
     # analyze lowpass filters
     if args.lowpass:
-        fp, td = groupdelay_lowpass(g, fo, qu)
+        fp, td = lowpass_groupdelay(g, fo, qu)
         for i in range(len(fp)):
             print('  TD{}  {:11.3f} ns     peak at {:11.4f} MHz '
                   .format(i+2, td[i] * 1e9, fp[i] / 1e6))
+        # print(lowpass_bandwidth(g, fo, qu))
         return
 
     # analyze bandpass filters

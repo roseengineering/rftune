@@ -11,6 +11,13 @@ rftune: ${src}
 README.md: readme.py
 	make readme
 
+##
+
+diff:
+	python3 readme.py | diff - README.md
+push: clean diff
+	test "$(shell git push 2>&1)" = "Everything up-to-date" || git gc
+
 readme:
 	python3 readme.py > README.md
 	
@@ -23,6 +30,8 @@ clean:
 distclean:
 	rm -f rftune README.md
 
+.PHONY: diff push readme install clean distclean
+
 ############################################
 
 repo = $(shell basename `pwd`)
@@ -30,11 +39,11 @@ repo = $(shell basename `pwd`)
 zip: clean
 	cd ..; zip -r -FS ~/apps/${repo} ${repo}
 
-push: clean
-	test "$(shell git push 2>&1)" = "Everything up-to-date" || git gc
-
-run: rftune
+run: rftune lowpass
 	./rftune -n 2 --but -f 2.3e9 -b 26.9e6
 	./rftune -n 2 --cheb 0.01 -f 7.1e6 -b 200e3 --qu 800 --validate 
+
+lowpass:
 	./rftune -f 7.36e6 --max-swr 1.039 --lowpass -n 7
 
+.PHONY: zip run

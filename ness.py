@@ -9,6 +9,8 @@ def insertion_loss(g, bw, fo, qu):
     return db
 
 
+### for plotting
+
 # return function fn(f, qu) which calculates the S11 group delay at f
 # for lossy bandpass filters shorted at resonator n
 def fn_groupdelay_tdqu(g, bw, fo, n):
@@ -37,36 +39,6 @@ def fn_groupdelay_maqu(g, bw, fo, n):
     return sy.lambdify([ f, qu ], s11, 'numpy')
 
 
-# return function fn(f, qu) which calculates the Ness S11 values
-# for lossy lowpass filters shorted at resonator n
-def fn_lowpass_maqu(g, fo, n):
-   f, w, wo, wp, qu = sy.symbols("f w wo wp qu")
-   xin = lowpass_xinqu(g, wp, qu, n)
-   xin = xin.subs(wp, w / wo)
-   xin = xin.subs(wo, 2 * sy.pi * fo)
-   xin = xin.subs(w, 2 * sy.pi * f)
-   s11 = (xin - g[0]) / (xin + g[0])
-   return sy.lambdify([ f, qu ], s11, 'numpy')
-
-
-# for a given QE / QU find the rho at QE
-def rho_qequ(qk, bw, fo, qu):
-    N = len(qk) - 1
-    QK = denormalize_qk(qk, bw, fo)
-    qe = QK[::N]
-    return (1 - qe / qu) / (1 + qe / qu)
-
-
-# for a lossless bandpass filter, calculate qk from Ness group delay values at fo
-def qk_groupdelayfo(td, fo):
-    wo = 2 * np.pi * fo
-    q = wo * td[0] / 4
-    td = np.concatenate((np.zeros(2), td))
-    k = 4 / wo / np.sqrt((td[2:-1] - td[:-3]) * (td[3:] - td[1:-2]))
-    qk = np.concatenate(([q], k, [q]))
-    return qk
-
-
 #######################
 # miscellaneous
 #######################
@@ -85,30 +57,6 @@ def groupdelay(fn, f, qu):
     d = np.unwrap(np.array([a, b]).T)
     td = -np.diff(d).flatten() / (2 * np.pi * df)
     return td[0] if np.isscalar(f) else td
-
-
-# reactance of a low pass filter grounded at resonator n
-def lowpass_xin(g, wp, n):
-    xin = 0
-    for i in reversed(range(1, n+1)):
-        G = wp * g[i]
-        if i % 2:
-            xin = 1 / (-G + 1 / xin) if xin else -1 / G
-        else:
-            xin += G
-    return xin
-
-
-# impedance of a low pass filter grounded at resonator n
-def lowpass_xinqu(g, wp, qu, n):
-    xin = 0
-    for i in reversed(range(1, n+1)):
-        G = wp * g[i] * sy.I
-        if i % 2:
-            xin = 1 / (G + 1 / xin) if xin else 1 / G
-        else:
-            xin += G + wp * g[i] / qu
-    return xin
 
 
 # denormalize qk coefficients
@@ -138,6 +86,26 @@ def coupling_g(g):
     return qk
 
 
+def chebyshev(n, ripple):
+    """
+    From page 99 of Microwave Filters, Impedance-Maching 
+    Networks, and Coupling Structures, by Matthaei, Young,
+    and Jones
+    """
+    beta = np.log(1 / np.tanh(ripple / (40 / np.log(10))))
+    gamma = np.sinh(beta / (2 * n))
+    k = np.array([ n for n in range(1, n + 1) ])
+    A = np.sin((2 * k - 1) * np.pi / (2 * n))
+    B = gamma**2 + np.sin(k * np.pi / n)**2
+    g = np.ones(n + 2)
+    g[1] = 2 * A[0] / gamma
+    for i in range(2, n + 1):
+        g[i] = 4.0 * A[i-2] * A[i-1] / (B[i-2] * g[i-1])
+    if n % 2 == 0:
+        g[n+1] = 1 / np.tanh(beta / 4)**2
+    return g
+
+
 #######################
 # time domain
 #######################
@@ -160,30 +128,6 @@ def range_timedomain(fo, period, n):
     df = fo / np.ceil(fo / df)
     span = (n - 1) * df
     return np.linspace(fo - span / 2, fo + span / 2, n)
-
-
-#######################
-# filters
-#######################
-
-def chebyshev(n, delta):
-    """
-    From page 99 of Microwave Filters, Impedance-Maching 
-    Networks, and Coupling Structures, by Matthaei, Young,
-    and Jones
-    """
-    beta = np.log(1 / np.tanh(delta / (40 / np.log(10))))
-    gamma = np.sinh(beta / (2 * n))
-    k = np.array([ n for n in range(1, n + 1) ])
-    A = np.sin((2 * k - 1) * np.pi / (2 * n))
-    B = gamma**2 + np.sin(k * np.pi / n)**2
-    g = np.ones(n + 2)
-    g[1] = 2 * A[0] / gamma
-    for i in range(2, n + 1):
-        g[i] = 4.0 * A[i-2] * A[i-1] / (B[i-2] * g[i-1])
-    if n % 2 == 0:
-        g[n+1] = 1 / np.tanh(beta / 4)**2
-    return g
 
 
 #######################
@@ -266,21 +210,7 @@ def nodal_delay_transmission(qk, bw, fo, qu):
     return groupdelay(fn, fo, qu)
 
 
-#######################
-# approximations
-#######################
-    
-def groupdelay_lowpass(g, fo, qu, steps=1000):
-    fp = []
-    td = []
-    f = np.linspace(fo / 10, 2 * fo, steps)
-    for n in range(2, len(g)-1):
-        fn = fn_lowpass_maqu(g, fo, n)
-        tdqu = groupdelay(fn, f, qu)
-        fp.append(f[np.argmax(tdqu)])
-        td.append(np.max(tdqu))
-    return fp, td
-
+### approximations
 
 # calculate the (approximate) minimum return loss of a filter
 def nodal_returnloss(qk, bw, fo, qu, steps=1000):
@@ -311,7 +241,7 @@ def nodal_bandwidth(qk, bw, fo, qu, cutoff=3.0103, steps=1000):
 
 
 #######################
-# lossless
+# lossless groupdelay
 #######################
 
 # for a lossless bandpass filter, calculate Ness group delay values using g
@@ -337,29 +267,8 @@ def groupdelay_qk(qk, bw):
 
 
 #######################
-# lossy
+# lossy groupdelay
 #######################
-
-# calculate QE and QU from the Ness group delay and return loss at QE 
-def qequ_groupdelay(fo, td1, ma1):
-    wo = 2 * np.pi * fo
-    qequ = (1 - abs(ma1)) / (1 + abs(ma1))
-    qe = wo * td1 / 4 * (1 - qequ**2)
-    qu = qe / qequ if qequ else np.inf
-    return qe, qu
-
-
-# calculate QE, QU, and K12 from TD1, TD2, and the RL at QE
-def k12_groupdelay(fo, td1, td2, ma1):
-    qe, qu = qequ_groupdelay(fo, td1, ma1)
-    if np.isinf(qu): qu = 1e99
-    wo = 2 * np.pi * fo
-    k12 = np.sqrt(
-        -1/qu**2 + 2/(qe*td2*wo) + 
-        np.sqrt(-8*qe*td2*wo + 4*qu**2 + td2**2*wo**2)/
-        (qe*qu*td2*wo))
-    return k12
-
 
 # calculate the Ness S11 values at fo for a filter with a given QU
 def groupdelay_maqu(g, bw, fo, qu):
@@ -391,5 +300,130 @@ def groupdelay_tdqu(g, bw, fo, qu):
         GD = GD.subs(dw, 2 * sy.pi * bw)
         td.append(float(GD.evalf()))
     return np.array(td)
+
+
+#######################
+# reverse
+#######################
+
+# calculate QE and QU from the Ness group delay and return loss at QE 
+def qequ_groupdelay(fo, td1, ma1):
+    wo = 2 * np.pi * fo
+    qequ = (1 - abs(ma1)) / (1 + abs(ma1))
+    qe = wo * td1 / 4 * (1 - qequ**2)
+    qu = qe / qequ if qequ else np.inf
+    return qe, qu
+
+
+# calculate QE, QU, and K12 from TD1, TD2, and the RL at QE
+def k12_groupdelay(fo, td1, td2, ma1):
+    qe, qu = qequ_groupdelay(fo, td1, ma1)
+    if np.isinf(qu): qu = 1e99
+    wo = 2 * np.pi * fo
+    k12 = np.sqrt(
+        -1/qu**2 + 2/(qe*td2*wo) + 
+        np.sqrt(-8*qe*td2*wo + 4*qu**2 + td2**2*wo**2)/
+        (qe*qu*td2*wo))
+    return k12
+
+###
+
+# for a given QE / QU find the reflection coefficient at QE
+def reflection_qequ(qk, bw, fo, qu):
+    N = len(qk) - 1
+    QK = denormalize_qk(qk, bw, fo)
+    qe = QK[::N]
+    return (1 - qe / qu) / (1 + qe / qu)
+
+
+# for a lossless bandpass filter, calculate qk from Ness group delay values at fo
+def qk_groupdelayfo(td, fo):
+    wo = 2 * np.pi * fo
+    q = wo * td[0] / 4
+    td = np.concatenate((np.zeros(2), td))
+    k = 4 / wo / np.sqrt((td[2:-1] - td[:-3]) * (td[3:] - td[1:-2]))
+    qk = np.concatenate(([q], k, [q]))
+    return qk
+
+
+#######################
+# lowpass
+#######################
+
+# reactance of a low pass filter grounded at resonator n
+def lowpass_xin(g, wp, n):
+    xin = 0
+    for i in reversed(range(1, n+1)):
+        G = wp * g[i]
+        if i % 2:
+            xin = 1 / (-G + 1 / xin) if xin else -1 / G
+        else:
+            xin += G
+    return xin
+
+
+# impedance of a low pass filter grounded at resonator n
+def lowpass_zin(g, wp, qu, n):
+    zin = 0
+    for i in reversed(range(1, n+1)):
+        G = wp * g[i] * sy.I
+        if i % 2:
+            zin = 1 / (G + 1 / zin) if zin else 1 / G
+        else:
+            zin += G + wp * g[i] / qu
+    return zin
+
+
+# return function fn(f, qu) which calculates the Ness S11 values
+# for lossy lowpass filters shorted at resonator n
+def fn_lowpass_reflection(g, fo, n):
+    f, w, wo, wp, qu = sy.symbols("f w wo wp qu")
+    xin = lowpass_zin(g, wp, qu, n)
+    xin = xin.subs(wp, w / wo)
+    xin = xin.subs(wo, 2 * sy.pi * fo)
+    xin = xin.subs(w, 2 * sy.pi * f)
+    s11 = (xin - g[0]) / (xin + g[0])
+    return sy.lambdify([ f, qu ], s11, 'numpy')
+
+
+def fn_lowpass_transmission(g, fo):
+    f, w, wo, wp, qu = sy.symbols("f w wo wp qu")
+    vin = 1
+    zin = g[0]
+    for i in range(1, len(g)):
+        G = wp * g[i] * sy.I
+        if i % 2:
+            zin += G + wp * g[i] / qu
+        else:
+            a = 1 / G
+            vin = vin * a / (a + zin)
+            zin = 1 / (1 / a + 1 / zin)
+    zin = zin.subs(wp, w / wo)
+    zin = zin.subs(wo, 2 * sy.pi * fo)
+    zin = zin.subs(w, 2 * np.pi * f)
+    s21 = 2 * vin * g[-1] / (zin + g[-1])
+    return sy.lambdify([f, qu], s21, 'numpy')
+
+
+### approximations
+
+def lowpass_groupdelay(g, fo, qu, steps=1000):
+    fp = []
+    td = []
+    f = np.linspace(fo / 10, 2 * fo, steps)
+    for n in range(2, len(g)-1):
+        fn = fn_lowpass_reflection(g, fo, n)
+        tdqu = groupdelay(fn, f, qu)
+        fp.append(f[np.argmax(tdqu)])
+        td.append(np.max(tdqu))
+    return fp, td
+
+
+def lowpass_bandwidth(g, fo, qu, steps=1000):
+    f = np.linspace(fo / 10, 2 * fo, steps)
+    fn = fn_lowpass_transmission(g, fo)
+    tdqu = groupdelay(fn, f, qu)
+    a = np.argmax(tdqu)
+    return f[a], tdqu[a]
 
 
