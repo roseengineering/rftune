@@ -33,9 +33,9 @@ Delay Bandwidth     =         30.5490 MHz
 Transmission Delay  =         44.6989 ns
 Minimum Return Loss =         27.5983 dB
 Insertion Loss      =          2.0144 dB
-Unloaded Qu         =       1400.0000
-Loaded Ql           =         85.5019
-Normalized Qo       =         16.3739
+Unloaded QU         =       1400.0000
+Loaded QL           =         85.5019
+Normalized Q0       =         16.3739
 Normalized and Denormalized qi and kij
   q1      0.781350              |   Q1     66.806877
   k12     0.970077              |   K12     0.011346
@@ -81,9 +81,9 @@ Delay Bandwidth     =         30.5490 MHz
 Transmission Delay  =         44.6989 ns
 Minimum Return Loss =         27.5983 dB
 Insertion Loss      =          2.0144 dB
-Unloaded Qu         =       1400.0000
-Loaded Ql           =         85.5019
-Normalized Qo       =         16.3739
+Unloaded QU         =       1400.0000
+Loaded QL           =         85.5019
+Normalized Q0       =         16.3739
 Normalized and Denormalized qi and kij
   q1      0.781350              |   Q1     66.806877
   k12     0.970077              |   K12     0.011346
@@ -196,7 +196,7 @@ optional arguments:
   --validate            validate results against k12 (default: False)
   --lowpass             predicted lowpass characteristics (default: False)
   --qequ <RL1(dB)> <TD1(ns)>
-                        calculate Qe and Qu using resonator 1 group delay and
+                        calculate QE and QU using resonator 1 group delay and
                         return loss (default: None)
   --k12 <RL1(dB)> <TD1(ns)> <TD2(ns)>
                         calculate k12 using resonator 1 and 2 group delay and
