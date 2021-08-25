@@ -162,7 +162,8 @@ $ rftune -h
 usage: rftune [-h] [-l] [-p] [-g] [-u QU] [-n NUMBER] [-f FREQUENCY]
               [-b BANDWIDTH] [--zo ZO] [--re RE] [--butterworth] [--bessel]
               [--legendre] [--chebyshev CHEBYSHEV] [--gaussian GAUSSIAN]
-              [--linear-phase LINEAR_PHASE] [--ripple RIPPLE] [--validate]
+              [--linear-phase LINEAR_PHASE] [--max-ripple MAX_RIPPLE]
+              [--max-swr MAX_SWR] [--max-rc MAX_RC] [--validate] [--lowpass]
               [--qequ <RL1dB)> <TD1(ns)>] [--k12 <RL1(dB)> <TD1(ns)> <TD2(ns>]
 
 optional arguments:
@@ -187,9 +188,13 @@ optional arguments:
   --gaussian GAUSSIAN   use a Gaussian filter (default: None)
   --linear-phase LINEAR_PHASE
                         use a Linear phase filter (default: None)
-  --ripple RIPPLE       use an arbitrary ripple lowpass Chebyshev filter
+  --max-ripple MAX_RIPPLE
+                        use Chebyshev filter of given ripple (default: None)
+  --max-swr MAX_SWR     use Chebyshev filter of given SWR (default: None)
+  --max-rc MAX_RC       use Chebyshev filter of given reflection coefficient
                         (default: None)
-  --validate
+  --validate            validate results against k12 (default: False)
+  --lowpass             predicted lowpass characteristics (default: False)
   --qequ <RL1(dB)> <TD1(ns)>
                         calculate Qe and Qu using resonator 1 group delay and
                         return loss (default: None)

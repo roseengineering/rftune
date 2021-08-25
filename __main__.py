@@ -39,8 +39,11 @@ def parse_args():
     parser.add_argument("--chebyshev", type=float, help='use a Chebyshev filter')
     parser.add_argument("--gaussian", type=float, help='use a Gaussian filter')
     parser.add_argument("--linear-phase", type=float, help='use a Linear phase filter')
-    parser.add_argument("--ripple", type=float, help='use an arbitrary ripple lowpass Chebyshev filter')
-    parser.add_argument("--validate", action='store_true')
+    parser.add_argument("--max-ripple", type=float, help='use Chebyshev filter of given ripple')
+    parser.add_argument("--max-swr", type=float, help='use Chebyshev filter of given SWR')
+    parser.add_argument("--max-rc", type=float, help='use Chebyshev filter of given reflection coefficient')
+    parser.add_argument("--validate", action='store_true', help='validate results against k12')
+    parser.add_argument("--lowpass", action='store_true', help='predicted lowpass characteristics')
     parser.add_argument("--qequ", nargs=2, metavar=('<RL1(dB)>', '<TD1(ns)>',), type=float,
                         help='calculate Qe and Qu using resonator 1 group delay and return loss')
     parser.add_argument("--k12", nargs=3, metavar=('<RL1(dB)>', '<TD1(ns)>', '<TD2(ns)>'), type=float,
@@ -132,17 +135,27 @@ def main():
         res = find_filter(table, 'GAUSSIAN', args.gaussian) 
     elif args.linear_phase:
         res = find_filter(table, 'LINEAR PHASE', args.linear_phase) 
-    elif args.ripple:
+    elif args.max_ripple or args.max_swr or args.max_rc:
         if not args.number:
             print("Number of poles not set.")
             return
         args.g = True
-        res = ('Chebyshev {} dB'.format(args.ripple), 
-               [chebyshev(args.number, args.ripple)]) 
+        if args.max_swr:
+            swr = args.max_swr
+            rc = (swr - 1) / (swr + 1)
+            ripple = -10 * np.log10(1 - rc**2)
+        if args.max_rc:
+            rc = args.max_rc
+            ripple = -10 * np.log10(1 - rc**2)
+        if args.max_ripple:
+            ripple = args.max_ripple
+        res = ('Chebyshev {:.4g} dB'.format(ripple), 
+               [chebyshev(args.number, ripple)]) 
     else:
         print('No filter type specified.')
         return
 
+    # translate tables
     name, values = res
     data = []
     for row in values:
@@ -154,6 +167,7 @@ def main():
                 return
             g = row
             d['g'] = g
+            d['qk'] = coupling_g(g)
             n = len(g) - 2
         else:
             if args.predistorted:
@@ -161,20 +175,18 @@ def main():
                 row = row[2:]
             qk = row[:1] + row[2:] + row[1:2] 
             d['qk'] = qk
+            d['g'] = prototype_qk(qk)
             n = len(qk) - 1
         if args.number is None or args.number == n:
             data.append(d)
 
+    # analyze filters
     count = 0
     for d in data:
         name = d.get('name')
         qo = d.get('qo')
-        if 'qk' in d:
-            qk = d['qk']
-            g = prototype_qk(qk)
-        else:
-            g = d['g']
-            qk = coupling_g(g)
+        qk = d['qk']
+        g = d['g']
         N = len(g) - 2
 
         if count: print()

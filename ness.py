@@ -10,7 +10,7 @@ def insertion_loss(g, bw, fo, qu):
 
 
 # return function fn(f, qu) which calculates the S11 group delay at f
-# for lossy bp filters shorted at resonator n
+# for lossy bandpass filters shorted at resonator n
 def fn_groupdelay_tdqu(g, bw, fo, n):
     f, w, wo, dw, wp, qu = sy.symbols("f w wo dw wp qu")
     xin = lowpass_xin(g, wp, n)
@@ -24,7 +24,7 @@ def fn_groupdelay_tdqu(g, bw, fo, n):
 
 
 # return function fn(f, qu) which calculates the Ness S11 values
-# for lossy bp filters shorted at resonator n
+# for lossy bandpass filters shorted at resonator n
 def fn_groupdelay_maqu(g, bw, fo, n):
     f, w, wo, dw, wp, qu = sy.symbols("f w wo dw wp qu")
     xin = lowpass_xin(g, wp, n)
@@ -37,6 +37,18 @@ def fn_groupdelay_maqu(g, bw, fo, n):
     return sy.lambdify([ f, qu ], s11, 'numpy')
 
 
+# return function fn(f, qu) which calculates the Ness S11 values
+# for lossy lowpass filters shorted at resonator n
+def fn_lowpass_maqu(g, fo, n):
+   f, w, wo, wp, qu = sy.symbols("f w wo wp qu")
+   xin = lowpass_xinqu(g, wp, qu, n)
+   xin = xin.subs(wp, w / wo)
+   xin = xin.subs(wo, 2 * sy.pi * fo)
+   xin = xin.subs(w, 2 * sy.pi * f)
+   s11 = (xin - g[0]) / (xin + g[0])
+   return sy.lambdify([ f, qu ], s11, 'numpy')
+
+
 # for a given QE / QU find the rho at QE
 def rho_qequ(qk, bw, fo, qu):
     N = len(qk) - 1
@@ -45,7 +57,7 @@ def rho_qequ(qk, bw, fo, qu):
     return (1 - qe / qu) / (1 + qe / qu)
 
 
-# for a lossless bp filter, calculate qk from Ness group delay values at fo
+# for a lossless bandpass filter, calculate qk from Ness group delay values at fo
 def qk_groupdelayfo(td, fo):
     wo = 2 * np.pi * fo
     q = wo * td[0] / 4
@@ -84,6 +96,18 @@ def lowpass_xin(g, wp, n):
             xin = 1 / (-G + 1 / xin) if xin else -1 / G
         else:
             xin += G
+    return xin
+
+
+# impedance of a low pass filter grounded at resonator n
+def lowpass_xinqu(g, wp, qu, n):
+    xin = 0
+    for i in reversed(range(1, n+1)):
+        G = wp * g[i] * sy.I
+        if i % 2:
+            xin = 1 / (G + 1 / xin) if xin else 1 / G
+        else:
+            xin += G + wp * g[i] / qu
     return xin
 
 
@@ -247,27 +271,27 @@ def nodal_delay_transmission(qk, bw, fo, qu):
 #######################
     
 # calculate the (approximate) minimum return loss of a filter
-def nodal_returnloss(qk, bw, fo, qu, step=1000):
+def nodal_returnloss(qk, bw, fo, qu, steps=1000):
     fn = fn_nodal_reflection(qk, bw, fo)
-    f = np.linspace(fo - bw, fo + bw, int(2 * bw / step + 1))
+    f = np.linspace(fo - bw, fo + bw, int(2 * bw / steps + 1))
     ma = -db(fn(f, qu))
     a = (np.diff(np.sign(np.diff(ma))) > 0).nonzero()[0] + 1
     return np.median(ma[a]) if a.size else -db(fn(fo, qu))
 
 
 # approximate the group delay bandwidth of a filter
-def nodal_delay_bandwidth(qk, bw, fo, qu, step=1000):
+def nodal_delay_bandwidth(qk, bw, fo, qu, steps=1000):
     fn = fn_nodal_transmission(qk, bw, fo)
-    f = np.linspace(fo - bw, fo + bw, int(2 * bw / step + 1))
+    f = np.linspace(fo - bw, fo + bw, int(2 * bw / steps + 1))
     td = groupdelay(fn, f, qu)
     a = np.diff(np.sign(np.diff(td))).nonzero()[0] + 1
     return f[a[-1]] - f[a[0]]
 
 
 # approximate the 3db bandwidth of a filter
-def nodal_bandwidth(qk, bw, fo, qu, cutoff=3.0103, step=1000):
+def nodal_bandwidth(qk, bw, fo, qu, cutoff=3.0103, steps=1000):
     fn = fn_nodal_transmission(qk, bw, fo)
-    f = np.linspace(fo - bw, fo + bw, int(2 * bw / step + 1))
+    f = np.linspace(fo - bw, fo + bw, int(2 * bw / steps + 1))
     ma = db(fn(f, qu))
     ma -= np.max(ma)
     a = (np.diff(np.sign(np.diff(abs(ma + cutoff)))) > 0).nonzero()[0] + 1
@@ -278,7 +302,7 @@ def nodal_bandwidth(qk, bw, fo, qu, cutoff=3.0103, step=1000):
 # lossless
 #######################
 
-# for a lossless bp filter, calculate Ness group delay values using g
+# for a lossless bandpass filter, calculate Ness group delay values using g
 def groupdelay_g(g, bw):
     dw = 2 * np.pi * bw
     td = [ 4 / dw * 
@@ -287,7 +311,7 @@ def groupdelay_g(g, bw):
     return td
 
 
-# for a lossless bp filter, calculate Ness group delay values using qk
+# for a lossless bandpass filter, calculate Ness group delay values using qk
 def groupdelay_qk(qk, bw):
     qk = np.array(qk)
     QB = qk[0] / bw 
@@ -355,5 +379,17 @@ def groupdelay_tdqu(g, bw, fo, qu):
         GD = GD.subs(dw, 2 * sy.pi * bw)
         td.append(float(GD.evalf()))
     return np.array(td)
+
+
+def groupdelay_lowpass(g, fo, qu, steps=1000):
+    fp = [ np.nan ]
+    td = [ np.nan ]
+    f = np.linspace(fo / 10, 2 * fo, steps)
+    for n in range(2, len(g)-2):
+        fn = fn_lowpass_maqu(g, fo, n)
+        tdqu = groupdelay(fn, f, qu)
+        fp.append(f[np.argmax(tdqu)])
+        td.append(np.max(tdqu))
+    return fp, td
 
 

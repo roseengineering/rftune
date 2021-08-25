@@ -9,8 +9,11 @@ rftune: ${src}
 	chmod 755 rftune
 
 README.md: readme.py
-	python3 readme.py > README.md
+	make readme
 
+readme:
+	python3 readme.py > README.md
+	
 install:
 	sudo cp rftune /usr/local/bin
 
