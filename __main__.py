@@ -225,8 +225,8 @@ def main():
             print('Minimum Return Loss = {:15.3f} dB'.format(rl))
             il = nodal_insertionloss(qk, bw, fo, qu) # step
             print('Insertion Loss      = {:15.3f} dB'.format(il))
-            print('Unloaded QU         = {:15.3f}'.format(qu))
             print('Loaded QL           = {:15.3f}'.format(fo / bw))
+            print('Unloaded QU         = {:15.3f}'.format(qu))
             print('Normalized Q0       = {:15.3f}'.format(qu / (fo / bw)))
             print('Normalized and Denormalized qi and kij')
             list_qk(qk, bw, fo)

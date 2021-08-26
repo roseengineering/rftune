@@ -33,8 +33,8 @@ Delay Bandwidth     =        30.55016 MHz
 Transmission Delay  =          44.699 ns
 Minimum Return Loss =          27.598 dB
 Insertion Loss      =           2.004 dB
-Unloaded QU         =        1400.000
 Loaded QL           =          85.502
+Unloaded QU         =        1400.000
 Normalized Q0       =          16.374
 Normalized and Denormalized qi and kij
   q1      0.781350              |   Q1     66.806877
@@ -81,8 +81,8 @@ Delay Bandwidth     =        30.55016 MHz
 Transmission Delay  =          44.699 ns
 Minimum Return Loss =          27.598 dB
 Insertion Loss      =           2.004 dB
-Unloaded QU         =        1400.000
 Loaded QL           =          85.502
+Unloaded QU         =        1400.000
 Normalized Q0       =          16.374
 Normalized and Denormalized qi and kij
   q1      0.781350              |   Q1     66.806877
