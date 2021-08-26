@@ -18,7 +18,7 @@ README.md: readme.py
 diff: all
 	python3 readme.py | diff README.md -
 
-push: clean diff
+push: clean
 	test "$(shell git push 2>&1)" = "Everything up-to-date" || git gc
 
 readme:
@@ -40,6 +40,7 @@ distclean:
 repo = $(shell basename `pwd`)
 
 zip: clean
+	test "$(shell git push 2>&1)" = "Everything up-to-date" || git gc
 	cd ..; zip -r -FS ~/apps/${repo} ${repo}
 
 run: all

@@ -26,16 +26,16 @@ $ rftune -g --cheb .01 -n 6 -f 2.3e9 -b 26.9e6 -u 1400
 ---------------------------------------
        6 Pole Chebyshev 0.01 dB        
 ---------------------------------------
-Center Frequency    =       2300.0000 MHz
-Design Bandwidth    =         26.9000 MHz
-Delay Bandwidth     =         30.5502 MHz
-3dB Bandwidth       =         30.5600 MHz
-Transmission Delay  =         44.6989 ns
-Minimum Return Loss =         27.5983 dB
-Insertion Loss      =          2.0044 dB
-Unloaded QU         =       1400.0000
-Loaded QL           =         85.5019
-Normalized Q0       =         16.3739
+Center Frequency    =      2300.00000 MHz
+Design Bandwidth    =        26.90000 MHz
+Delay Bandwidth     =        30.55016 MHz
+3dB Bandwidth       =        30.56018 MHz
+Transmission Delay  =          44.699 ns
+Minimum Return Loss =          27.598 dB
+Insertion Loss      =           2.004 dB
+Unloaded QU         =        1400.000
+Loaded QL           =          85.502
+Normalized Q0       =          16.374
 Normalized and Denormalized qi and kij
   q1      0.781350              |   Q1     66.806877
   k12     0.970077              |   K12     0.011346
@@ -74,16 +74,16 @@ $ rftune -g --cheb .01 -n 6 -f 2.3e9 -b 26.9e6 -u 1400 --re 100
 ---------------------------------------
        6 Pole Chebyshev 0.01 dB        
 ---------------------------------------
-Center Frequency    =       2300.0000 MHz
-Design Bandwidth    =         26.9000 MHz
-Delay Bandwidth     =         30.5502 MHz
-3dB Bandwidth       =         30.5600 MHz
-Transmission Delay  =         44.6989 ns
-Minimum Return Loss =         27.5983 dB
-Insertion Loss      =          2.0044 dB
-Unloaded QU         =       1400.0000
-Loaded QL           =         85.5019
-Normalized Q0       =         16.3739
+Center Frequency    =      2300.00000 MHz
+Design Bandwidth    =        26.90000 MHz
+Delay Bandwidth     =        30.55016 MHz
+3dB Bandwidth       =        30.56018 MHz
+Transmission Delay  =          44.699 ns
+Minimum Return Loss =          27.598 dB
+Insertion Loss      =           2.004 dB
+Unloaded QU         =        1400.000
+Loaded QL           =          85.502
+Normalized Q0       =          16.374
 Normalized and Denormalized qi and kij
   q1      0.781350              |   Q1     66.806877
   k12     0.970077              |   K12     0.011346
@@ -113,12 +113,12 @@ Filter Termination and Line Impedance Mismatch Results (QU=1400.0)
   1 2 3 4       149.828 ns   6.326 dB   |   6 5 4 3       149.828 ns   6.326 dB
   1 2 3 4 5      45.394 ns   2.081 dB   |   6 5 4 3 2      45.394 ns   2.081 dB
   1 2 3 4 5 6   197.528 ns   8.025 dB   |   6 5 4 3 2 1   197.527 ns   8.025 dB
-  Line Impedance                   50.0000 ohm
-  Termination Resistance          100.0000 ohm
-  Transmission Delay               39.2184 ns
-  Insertion Loss                    3.4027 dB
-  Empirical QE1                    33.4034
-  Empirical QE6                    33.4037
+  Line Impedance                    50.000 ohm
+  Termination Resistance           100.000 ohm
+  Transmission Delay                39.218 ns
+  Insertion Loss                     3.403 dB
+  Empirical QE1                     33.403
+  Empirical QE6                     33.404
 ```
 
 

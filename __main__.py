@@ -199,35 +199,35 @@ def main():
         if qo:
             print('Predistored Q0      = {:>15}'.format(str(qo)))
         if fo:
-            print('Center Frequency    = {:15.4f} MHz'.format(fo / 1e6))
+            print('Center Frequency    = {:15.5f} MHz'.format(fo / 1e6))
         if args.lowpass:
             fp, td = lowpass_groupdelay(g, fo, qu)
             print('Ness Group Delay of Low Pass Filter (QU={})'.format(qu))
             for i in range(len(fp)):
-                print('  TD{}  {:11.3f} ns     peak at {:11.4f} MHz '
+                print('  TD{}  {:11.3f} ns     peak at {:11.5f} MHz '
                       .format(i+2, td[i] * 1e9, fp[i] / 1e6))
             fpeak, tdpeak = lowpass_bandwidth(g, fo, qu)
             print('Group Delay Peak Of Terminated Low Pass Filter (QU={})'.format(qu))
-            print('       {:11.3f} ns     peak at {:11.4f} MHz '
+            print('       {:11.3f} ns     peak at {:11.5f} MHz '
                   .format(tdpeak * 1e9, fpeak / 1e6))
             continue
 
         if bw:
-            print('Design Bandwidth    = {:15.4f} MHz'.format(bw / 1e6))
+            print('Design Bandwidth    = {:15.5f} MHz'.format(bw / 1e6))
         if bw and fo:
             bwtd = nodal_delay_bandwidth(qk, bw, fo, qu) # step
-            print('Delay Bandwidth     = {:15.4f} MHz'.format(bwtd / 1e6))
+            print('Delay Bandwidth     = {:15.5f} MHz'.format(bwtd / 1e6))
             bwdb = nodal_bandwidth(qk, bw, fo, qu) # step
-            print('3dB Bandwidth       = {:15.4f} MHz'.format(bwdb / 1e6))
+            print('3dB Bandwidth       = {:15.5f} MHz'.format(bwdb / 1e6))
             td = nodal_delay_transmission(qk, bw, fo, qu)
-            print('Transmission Delay  = {:15.4f} ns'.format(td * 1e9))
+            print('Transmission Delay  = {:15.3f} ns'.format(td * 1e9))
             rl = nodal_returnloss(qk, bw, fo, qu) # step
-            print('Minimum Return Loss = {:15.4f} dB'.format(rl))
+            print('Minimum Return Loss = {:15.3f} dB'.format(rl))
             il = nodal_insertionloss(qk, bw, fo, qu) # step
-            print('Insertion Loss      = {:15.4f} dB'.format(il))
-            print('Unloaded QU         = {:15.4f}'.format(qu))
-            print('Loaded QL           = {:15.4f}'.format(fo / bw))
-            print('Normalized Q0       = {:15.4f}'.format(qu / (fo / bw)))
+            print('Insertion Loss      = {:15.3f} dB'.format(il))
+            print('Unloaded QU         = {:15.3f}'.format(qu))
+            print('Loaded QL           = {:15.3f}'.format(fo / bw))
+            print('Normalized Q0       = {:15.3f}'.format(qu / (fo / bw)))
             print('Normalized and Denormalized qi and kij')
             list_qk(qk, bw, fo)
 
@@ -261,15 +261,15 @@ def main():
 
                 QE1 = fo / bw * qk[0] * args.zo / args.re
                 QE2 = fo / bw * qk[-1] * args.zo / args.re
-                print('  Line Impedance           {:15.4f} ohm'.format(args.zo))
-                print('  Termination Resistance   {:15.4f} ohm'.format(args.re))
+                print('  Line Impedance           {:15.3f} ohm'.format(args.zo))
+                print('  Termination Resistance   {:15.3f} ohm'.format(args.re))
                 fn = fn_nodal_transmission(qk, bw, fo, re=args.zo/args.re)
                 td = groupdelay(fn, fo, qu)
-                print('  Transmission Delay       {:15.4f} ns'.format(td * 1e9))
+                print('  Transmission Delay       {:15.3f} ns'.format(td * 1e9))
                 il = -db(fn(fo, qu))
-                print('  Insertion Loss           {:15.4f} dB'.format(il))
-                print('  Empirical QE{}            {:15.4f}'.format(1, QE1))
-                print('  Empirical QE{}            {:15.4f}'.format(N, QE2))
+                print('  Insertion Loss           {:15.3f} dB'.format(il))
+                print('  Empirical QE{}            {:15.3f}'.format(1, QE1))
+                print('  Empirical QE{}            {:15.3f}'.format(N, QE2))
 
             if args.validate:
                 print('Validation')
