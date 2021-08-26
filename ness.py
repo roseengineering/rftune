@@ -242,12 +242,11 @@ def nodal_delay_bandwidth(qk, bw, fo, qu, steps=1000):
 # approximate the 3db bandwidth of a filter
 def nodal_bandwidth(qk, bw, fo, qu, cutoff=3.0103, steps=1000):
     fn = fn_nodal_transmission(qk, bw, fo)
+    res = minimize(lambda x: -db(fn(x, qu)), fo, method='Nelder-Mead')
+    mamax = -res.fun if res.success else np.nan
     ###
     f = np.linspace(fo - bw, fo + bw, int(2 * bw / steps + 1))
     ma = db(fn(f, qu))
-    mamax = np.max(ma)
-    res = minimize(lambda x: -db(fn(x, qu)), fo, method='Nelder-Mead')
-    mamax = -res.fun if res.success else np.nan
     a = (np.diff(np.sign(np.diff(abs(mamax - ma - cutoff)))) > 0).nonzero()[0] + 1
     f1 = f[a[0]]
     f2 = f[a[-1]]
