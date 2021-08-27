@@ -1,7 +1,6 @@
 
 import numpy as np
 import sympy as sy
-from scipy.optimize import minimize
 
 
 # cohn approximation of insertion loss
@@ -216,7 +215,7 @@ def nodal_delay_transmission(qk, bw, fo, qu):
 # calculate the (approximate) minimum return loss of a filter
 def nodal_returnloss(qk, bw, fo, qu, steps=1000):
     fn = fn_nodal_reflection(qk, bw, fo)
-    f = np.linspace(fo - bw, fo + bw, int(2 * bw / steps + 1))
+    f = np.linspace(fo - 2 * bw, fo + 2 * bw, steps)
     ma = -db(fn(f, qu))
     a = (np.diff(np.sign(np.diff(ma))) > 0).nonzero()[0] + 1
     return np.median(ma[a]) if a.size else -db(fn(fo, qu))
@@ -226,35 +225,37 @@ def nodal_returnloss(qk, bw, fo, qu, steps=1000):
 def nodal_delay_bandwidth(qk, bw, fo, qu, steps=1000):
     fn = fn_nodal_transmission(qk, bw, fo)
     ###
-    f = np.linspace(fo - bw, fo + bw, int(2 * bw / steps + 1))
+    f = np.linspace(fo - 2 * bw, fo + 2 * bw, steps)
     td = groupdelay(fn, f, qu)
     a = np.diff(np.sign(np.diff(td))).nonzero()[0] + 1
     f1 = f[a[0]]
     f2 = f[a[-1]]
     ###
-    res = minimize(lambda x: -groupdelay(fn, x, qu), f1, method='Nelder-Mead')
-    f1 = res.x[0] if res.success else np.nan
-    res = minimize(lambda x: -groupdelay(fn, x, qu), f2, method='Nelder-Mead')
-    f2 = res.x[0] if res.success else np.nan
+    # from scipy.optimize import minimize
+    # res = minimize(lambda x: -groupdelay(fn, x, qu), f1, method='Nelder-Mead')
+    # f1 = res.x[0] if res.success else np.nan
+    # res = minimize(lambda x: -groupdelay(fn, x, qu), f2, method='Nelder-Mead')
+    # f2 = res.x[0] if res.success else np.nan
     return f2 - f1
 
 
 # approximate the 3db bandwidth of a filter
 def nodal_bandwidth(qk, bw, fo, qu, cutoff=3.0103, steps=1000):
     fn = fn_nodal_transmission(qk, bw, fo)
-    res = minimize(lambda x: -db(fn(x, qu)), fo, method='Nelder-Mead')
-    mamax = -res.fun if res.success else np.nan
-    ###
-    f = np.linspace(fo - bw, fo + bw, int(2 * bw / steps + 1))
+    f = np.linspace(fo - 2 * bw, fo + 2 * bw, steps)
     ma = db(fn(f, qu))
+    mamax = np.max(ma)
     a = (np.diff(np.sign(np.diff(abs(mamax - ma - cutoff)))) > 0).nonzero()[0] + 1
     f1 = f[a[0]]
     f2 = f[a[-1]]
     ###
-    res = minimize(lambda x: abs(mamax - db(fn(x, qu)) - cutoff), f1, method='Nelder-Mead')
-    f1 = res.x[0] if res.success else np.nan
-    res = minimize(lambda x: abs(mamax - db(fn(x, qu)) - cutoff), f2, method='Nelder-Mead')
-    f2 = res.x[0] if res.success else np.nan
+    # from scipy.optimize import minimize
+    # res = minimize(lambda x: -db(fn(x, qu)), fo, method='Nelder-Mead')
+    # mamax = -res.fun if res.success else np.nan
+    # res = minimize(lambda x: abs(mamax - db(fn(x, qu)) - cutoff), f1, method='Nelder-Mead')
+    # f1 = res.x[0] if res.success else np.nan
+    # res = minimize(lambda x: abs(mamax - db(fn(x, qu)) - cutoff), f2, method='Nelder-Mead')
+    # f2 = res.x[0] if res.success else np.nan
     return f2 - f1
 
 #######################
@@ -430,11 +431,13 @@ def lowpass_groupdelay(g, fo, qu, steps=1000):
         ###
         f = np.linspace(0, 2 * fo, steps)
         tdqu = groupdelay(fn, f, qu)
-        fmax = f[np.argmax(tdqu)]
-        ###
-        res = minimize(lambda x: -groupdelay(fn, x, qu), fmax, method='Nelder-Mead')
-        fmax = res.x[0] if res.success else np.nan
-        peak = -res.fun if res.success else np.nan
+        a = np.argmax(tdqu)
+        fmax = f[a]
+        peak = tdqu[a]
+        # from scipy.optimize import minimize
+        # res = minimize(lambda x: -groupdelay(fn, x, qu), fmax, method='Nelder-Mead')
+        # fmax = res.x[0] if res.success else np.nan
+        # peak = -res.fun if res.success else np.nan
         fp.append(fmax)
         td.append(peak)
     return fp, td
@@ -442,14 +445,16 @@ def lowpass_groupdelay(g, fo, qu, steps=1000):
 
 def lowpass_bandwidth(g, fo, qu, steps=1000):
     fn = fn_lowpass_transmission(g, fo)
-    ###
     f = np.linspace(0, 2 * fo, steps)
     tdqu = groupdelay(fn, f, qu)
-    fmax = f[np.argmax(tdqu)]
+    a = np.argmax(tdqu)
+    fmax = f[a]
+    peak = tdqu[a]
     ###
-    res = minimize(lambda x: -groupdelay(fn, x, qu), fmax, method='Nelder-Mead')
-    fmax = res.x[0] if res.success else np.nan
-    peak = -res.fun if res.success else np.nan
+    # from scipy.optimize import minimize
+    # res = minimize(lambda x: -groupdelay(fn, x, qu), fmax, method='Nelder-Mead')
+    # fmax = res.x[0] if res.success else np.nan
+    # peak = -res.fun if res.success else np.nan
     return fmax, peak
 
 
