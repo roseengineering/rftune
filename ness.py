@@ -107,30 +107,6 @@ def chebyshev(n, ripple):
 
 
 #######################
-# time domain
-#######################
-
-# return the time domain of gamma values at frequencies f
-def timedomain(f, gm):
-    gm = np.concatenate(([0], gm))
-    N = len(gm)
-    window = np.kaiser(N, 14) # kaiser gives nicer peaks and dips
-    td = np.fft.ifft(gm * window, N * 2 - 1) # ensure odd
-    td = db(td[:N])
-    df = f[1] - f[0]
-    taxis = np.linspace(0, 1 / df / 2, N)
-    return taxis, td
-
-
-# calculate the frequency span needed for a given time domain period
-def range_timedomain(fo, period, n):
-    df = 1 / (2 * period)
-    df = fo / np.ceil(fo / df)
-    span = (n - 1) * df
-    return np.linspace(fo - span / 2, fo + span / 2, n)
-
-
-#######################
 # nodal
 #######################
 
