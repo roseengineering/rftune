@@ -200,7 +200,6 @@ def main():
         print('Normalized Lowpass Coefficients gi')
         for i in range(len(g)):
             print('  g{}  {:11.6f}'.format(i, g[i]))
-        print('---------------------------------------')
 
         if qo:
             print('Predistored Q0      = {:>15}'.format(str(qo)))

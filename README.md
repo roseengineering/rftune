@@ -15,6 +15,14 @@ return loss, as well as the various Ness [1][2] group delays
 and associated return losses for the
 given filter.
 
+## Installation
+
+To build the rftune executable, run:
+
+```
+sh build.sh
+```
+
 ## Example
 
 To predict the properties of a 6 pole Chebyshev filter of 0.01 dB ripple centered at 2.3 GHz
@@ -35,7 +43,6 @@ Normalized Lowpass Coefficients gi
   g5     1.497030
   g6     0.709840
   g7     1.100750
----------------------------------------
 Center Frequency    =      2300.00000 MHz
 Design Bandwidth    =        26.90000 MHz
 Delay Bandwidth     =        30.55070 MHz
@@ -73,7 +80,7 @@ Ness Group Delay and Return Loss (QU=1400.0)
 
 This filter is an example from Ness's paper.
 
-![](ness.png)
+![](res/ness.png)
 
 If your VNA is 50 ohms but your filter terminates in 100 ohms, the script
 can adjust its predictions for this.
@@ -93,7 +100,6 @@ Normalized Lowpass Coefficients gi
   g5     1.497030
   g6     0.709840
   g7     1.100750
----------------------------------------
 Center Frequency    =      2300.00000 MHz
 Design Bandwidth    =        26.90000 MHz
 Delay Bandwidth     =        30.55070 MHz
