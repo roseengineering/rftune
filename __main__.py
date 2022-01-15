@@ -196,6 +196,12 @@ def main():
         print('---------------------------------------')
         print('{:^39}'.format('{} Pole {}'.format(N, name)))
         print('---------------------------------------')
+
+        print('Normalized Lowpass Coefficients gi')
+        for i in range(len(g)):
+            print('  g{}  {:11.6f}'.format(i, g[i]))
+        print('---------------------------------------')
+
         if qo:
             print('Predistored Q0      = {:>15}'.format(str(qo)))
         if fo:

@@ -26,6 +26,16 @@ $ rftune -g --cheb .01 -n 6 -f 2.3e9 -b 26.9e6 -u 1400
 ---------------------------------------
        6 Pole Chebyshev 0.01 dB        
 ---------------------------------------
+Normalized Lowpass Coefficients gi
+  g0     1.000000
+  g1     0.781350
+  g2     1.360010
+  g3     1.689670
+  g4     1.535020
+  g5     1.497030
+  g6     0.709840
+  g7     1.100750
+---------------------------------------
 Center Frequency    =      2300.00000 MHz
 Design Bandwidth    =        26.90000 MHz
 Delay Bandwidth     =        30.55070 MHz
@@ -73,6 +83,16 @@ can adjust its predictions for this.
 $ rftune -g --cheb .01 -n 6 -f 2.3e9 -b 26.9e6 -u 1400 --re 100
 ---------------------------------------
        6 Pole Chebyshev 0.01 dB        
+---------------------------------------
+Normalized Lowpass Coefficients gi
+  g0     1.000000
+  g1     0.781350
+  g2     1.360010
+  g3     1.689670
+  g4     1.535020
+  g5     1.497030
+  g6     0.709840
+  g7     1.100750
 ---------------------------------------
 Center Frequency    =      2300.00000 MHz
 Design Bandwidth    =        26.90000 MHz

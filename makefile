@@ -1,3 +1,5 @@
+repo = $(shell basename `pwd`)
+
 src = coupled.py lowpass.py __main__.py ness.py zverev.py
 
 all: rftune README.md
@@ -5,11 +7,14 @@ all: rftune README.md
 rftune: ${src}
 	python -m zipfile -c rftune.zip $^
 	echo '#!/usr/bin/python3' | cat - rftune.zip > rftune
-	rm rftune.zip
+	rm -f rftune.zip
 	chmod 755 rftune
 
 README.md: readme.py
 	make readme
+
+zip:
+	cd ..; zip -r -FS ~/apps/${repo} ${repo}
 
 .PHONY: all push readme install clean distclean
 
@@ -39,9 +44,7 @@ distclean:
 
 repo = $(shell basename `pwd`)
 
-zip: clean
-	test "$(shell git push 2>&1)" = "Everything up-to-date" || git gc
-	cd ..; zip -r -FS ~/apps/${repo} ${repo}
+	# test "$(shell git push 2>&1)" = "Everything up-to-date" || git gc
 
 run: all
 	./rftune -n 2 --but -f 2.3e9 -b 26.9e6
