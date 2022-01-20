@@ -206,7 +206,7 @@ def main():
         list_g(g)
 
         if qo:
-            print('Predistored Q0      = {:>15}'.format(str(qo)))
+            print('Predistored q0      = {:>15}'.format(str(qo)))
         if fo:
             print('Center Frequency    = {:15.5f} MHz'.format(fo / 1e6))
         if args.lowpass:
@@ -236,7 +236,7 @@ def main():
             print('Insertion Loss      = {:15.3f} dB'.format(il))
             print('Loaded QL           = {:15.3f}'.format(fo / bw))
             print('Unloaded QU         = {:15.3f}'.format(qu))
-            print('Normalized Q0       = {:15.3f}'.format(qu / (fo / bw)))
+            print('Normalized q0       = {:15.3f}'.format(qu / (fo / bw)))
             print('Normalized and Denormalized qi, kij, and Coupling Bandwidths')
             list_qk(qk, bw, fo)
 
