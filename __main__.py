@@ -55,11 +55,16 @@ def parse_args():
 def list_qk(qk, bw, fo):
     QK = denormalize_qk(qk, bw, fo)
     for i in range(len(QK)):
-        name1, name2 = f'k{i}{i+1}', f'K{i}{i+1}'
-        if i == 0: name1, name2, = 'q1', 'Q1'
-        if i == len(QK)-1: name1, name2 = f'q{i}', f'Q{i}'
-        print('  {:3s}  {:11.6f}              |   {:3s}  {:11.6f}'
-              .format(name1, qk[i], name2, QK[i]))
+        name1, name2, name3 = f'k{i}{i+1}', f'K{i}{i+1}', f'BW{i}{i+1}'
+        if i == 0: name1, name2, name3 = 'q1', 'Q1', 'BW1'
+        if i == len(QK)-1: name1, name2, name3 = f'q{i}', f'Q{i}', f'BW{i}'
+        print('  {:4s} {:11.6f}   |   {:4s} {:11.6f}   |   {:4s} {:11.5f} MHz'
+              .format(name1, qk[i], name2, QK[i], name3, qk[i] * bw / 1e6))
+
+
+def list_g(g):
+    for i in range(len(g)):
+        print('  {:4s} {:11.6f}'.format(f'g{i}', g[i]))
 
 
 def list_groupdelays(TD1, TD2, MA1, MA2):
@@ -198,8 +203,7 @@ def main():
         print('---------------------------------------')
 
         print('Normalized Lowpass Coefficients gi')
-        for i in range(len(g)):
-            print('  g{}  {:11.6f}'.format(i, g[i]))
+        list_g(g)
 
         if qo:
             print('Predistored Q0      = {:>15}'.format(str(qo)))
@@ -233,7 +237,7 @@ def main():
             print('Loaded QL           = {:15.3f}'.format(fo / bw))
             print('Unloaded QU         = {:15.3f}'.format(qu))
             print('Normalized Q0       = {:15.3f}'.format(qu / (fo / bw)))
-            print('Normalized and Denormalized qi and kij')
+            print('Normalized and Denormalized qi, kij, and Coupling Bandwidths')
             list_qk(qk, bw, fo)
 
         if bw:
