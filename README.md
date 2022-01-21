@@ -35,14 +35,14 @@ $ rftune -g --cheb .01 -n 6 -f 2.3e9 -b 26.9e6 -u 1400
        6 Pole Chebyshev 0.01 dB        
 ---------------------------------------
 Normalized Lowpass Coefficients gi
-  g0     1.000000
-  g1     0.781350
-  g2     1.360010
-  g3     1.689670
-  g4     1.535020
-  g5     1.497030
-  g6     0.709840
-  g7     1.100750
+  g0      1.000000
+  g1      0.781350
+  g2      1.360010
+  g3      1.689670
+  g4      1.535020
+  g5      1.497030
+  g6      0.709840
+  g7      1.100750
 Center Frequency    =      2300.00000 MHz
 Design Bandwidth    =        26.90000 MHz
 Delay Bandwidth     =        30.55070 MHz
@@ -52,15 +52,15 @@ Minimum Return Loss =          27.598 dB
 Insertion Loss      =           2.004 dB
 Loaded QL           =          85.502
 Unloaded QU         =        1400.000
-Normalized Q0       =          16.374
-Normalized and Denormalized qi and kij
-  q1      0.781350              |   Q1     66.806877
-  k12     0.970077              |   K12     0.011346
-  k23     0.659672              |   K23     0.007715
-  k34     0.620929              |   K34     0.007262
-  k45     0.659672              |   K45     0.007715
-  k56     0.970073              |   K56     0.011346
-  q6      0.781356              |   Q6     66.807423
+Normalized q0       =          16.374
+Normalized and Denormalized qi, kij, and Coupling Bandwidths
+  q1      0.781350   |   Q1     66.806877   |   BW1     21.01832 MHz
+  k12     0.970077   |   K12     0.011346   |   BW12    26.09507 MHz
+  k23     0.659672   |   K23     0.007715   |   BW23    17.74517 MHz
+  k34     0.620929   |   K34     0.007262   |   BW34    16.70299 MHz
+  k45     0.659672   |   K45     0.007715   |   BW45    17.74516 MHz
+  k56     0.970073   |   K56     0.011346   |   BW56    26.09497 MHz
+  q6      0.781356   |   Q6     66.807423   |   BW6     21.01849 MHz
 Lossless Ness Group Delay and Return Loss
   1              18.492 ns   0.000 dB   |   6              18.492 ns   0.000 dB
   1 2            32.186 ns   0.000 dB   |   6 5            32.186 ns   0.000 dB
@@ -92,14 +92,14 @@ $ rftune -g --cheb .01 -n 6 -f 2.3e9 -b 26.9e6 -u 1400 --re 100
        6 Pole Chebyshev 0.01 dB        
 ---------------------------------------
 Normalized Lowpass Coefficients gi
-  g0     1.000000
-  g1     0.781350
-  g2     1.360010
-  g3     1.689670
-  g4     1.535020
-  g5     1.497030
-  g6     0.709840
-  g7     1.100750
+  g0      1.000000
+  g1      0.781350
+  g2      1.360010
+  g3      1.689670
+  g4      1.535020
+  g5      1.497030
+  g6      0.709840
+  g7      1.100750
 Center Frequency    =      2300.00000 MHz
 Design Bandwidth    =        26.90000 MHz
 Delay Bandwidth     =        30.55070 MHz
@@ -109,15 +109,15 @@ Minimum Return Loss =          27.598 dB
 Insertion Loss      =           2.004 dB
 Loaded QL           =          85.502
 Unloaded QU         =        1400.000
-Normalized Q0       =          16.374
-Normalized and Denormalized qi and kij
-  q1      0.781350              |   Q1     66.806877
-  k12     0.970077              |   K12     0.011346
-  k23     0.659672              |   K23     0.007715
-  k34     0.620929              |   K34     0.007262
-  k45     0.659672              |   K45     0.007715
-  k56     0.970073              |   K56     0.011346
-  q6      0.781356              |   Q6     66.807423
+Normalized q0       =          16.374
+Normalized and Denormalized qi, kij, and Coupling Bandwidths
+  q1      0.781350   |   Q1     66.806877   |   BW1     21.01832 MHz
+  k12     0.970077   |   K12     0.011346   |   BW12    26.09507 MHz
+  k23     0.659672   |   K23     0.007715   |   BW23    17.74517 MHz
+  k34     0.620929   |   K34     0.007262   |   BW34    16.70299 MHz
+  k45     0.659672   |   K45     0.007715   |   BW45    17.74516 MHz
+  k56     0.970073   |   K56     0.011346   |   BW56    26.09497 MHz
+  q6      0.781356   |   Q6     66.807423   |   BW6     21.01849 MHz
 Lossless Ness Group Delay and Return Loss
   1              18.492 ns   0.000 dB   |   6              18.492 ns   0.000 dB
   1 2            32.186 ns   0.000 dB   |   6 5            32.186 ns   0.000 dB
