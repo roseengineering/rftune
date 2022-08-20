@@ -249,6 +249,7 @@ Bessel
 Linear Phase 0.05 Deg
 Linear Phase 0.5 Deg
 Legendre
+Gaussian
 Gaussian 6 dB
 Gaussian 12 dB
 ```
