@@ -87,6 +87,7 @@ def coupling_g(g):
 
 
 def chebyshev(n, ripple):
+    print(n, ripple)
     """
     From page 99 of Microwave Filters, Impedance-Maching 
     Networks, and Coupling Structures, by Matthaei, Young,
